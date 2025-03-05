@@ -1,48 +1,68 @@
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import React from 'react';
+import { View, StyleSheet, ImageBackground } from 'react-native';
+import { Text, Button } from 'react-native-paper';
 
 const SplashScreen = ({ navigation }) => {
   return (
-    <View style={styles.container}>
-      <Text style={styles.logo}>Snapmeds</Text>
-      <Text style={styles.title}>Nagpur's First Medicine Delivery Application Designed  By Nagpurkars for Nagpurkars. Aims to Deliver medicines in 60 Minutes</Text>
-      <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('LoginScreen')}>
-        <Text style={styles.buttonText}>Get Started</Text>
-      </TouchableOpacity>
-    </View>
+    <ImageBackground 
+      source={require('../Assets/Images/background.jpg')}
+      style={styles.backgroundImage}
+    >
+      <View style={styles.container}>
+        <Text variant="displayMedium" style={styles.logo}>
+          Snapmeds
+        </Text>
+
+        <Text variant="bodyLarge" style={styles.title}>
+          Nagpur's First Medicine Delivery Application. Designed by Nagpurkars for Nagpurkars. Aims to deliver medicines in 60 minutes.
+        </Text>
+
+        <Button 
+          mode="contained" 
+          onPress={() => navigation.navigate('LoginScreen')}
+          style={styles.button}
+          labelStyle={styles.buttonText}
+        >
+          Get Started
+        </Button>
+      </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  backgroundImage: {
+    flex: 1,
+    resizeMode: 'cover',
+  },
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-end', // Align children at the bottom
     alignItems: 'center',
-    backgroundColor: '#033c6b',
+    backgroundColor: 'rgba(0, 0, 0, 0.7)', // Dark overlay for better contrast
+    padding: 20,
+    paddingBottom: 50, // Extra padding at the bottom
   },
   logo: {
-    fontSize: 50,
     fontWeight: 'bold',
-    color:"#38b6ff",
+    color: "#38b6ff",
+    textAlign: 'center',
     marginBottom: 20,
   },
   title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color:"#fff",
+    color: "#fff",
+    textAlign: 'center',
     marginBottom: 20,
-    padding:20
   },
   button: {
-    backgroundColor: '#38b6ff',
-    paddingVertical: 12,
-    paddingHorizontal: 24,
+    width: 200,
     borderRadius: 8,
+    backgroundColor: "#fff",
   },
   buttonText: {
-    color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
+    color: "#000"
   },
 });
 

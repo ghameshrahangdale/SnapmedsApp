@@ -1,22 +1,42 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, FlatList, StyleSheet, Image } from "react-native";
-import { Card, Button, IconButton } from "react-native-paper";
-import { useNavigation } from '@react-navigation/native';
+import React, {useState} from 'react';
+import {View, Text, TextInput, FlatList, StyleSheet, Image} from 'react-native';
+import {Card, Button, IconButton} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 export default function BrowseMedicines() {
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [cart, setCart] = useState([]);
   const navigation = useNavigation();
 
   const medicines = [
-    { id: "1", name: "Paracetamol", price: "₹20", description: "For fever and pain relief" },
-    { id: "2", name: "Ibuprofen", price: "₹30", description: "Anti-inflammatory and pain relief" },
-    { id: "3", name: "Cetirizine", price: "₹15", description: "For allergy relief" },
-    { id: "4", name: "Amoxicillin", price: "₹50", description: "Antibiotic for infections" },
+    {
+      id: '1',
+      name: 'Paracetamol',
+      price: '₹20',
+      description: 'For fever and pain relief',
+    },
+    {
+      id: '2',
+      name: 'Ibuprofen',
+      price: '₹30',
+      description: 'Anti-inflammatory and pain relief',
+    },
+    {
+      id: '3',
+      name: 'Cetirizine',
+      price: '₹15',
+      description: 'For allergy relief',
+    },
+    {
+      id: '4',
+      name: 'Amoxicillin',
+      price: '₹50',
+      description: 'Antibiotic for infections',
+    },
   ];
 
-  const addToCart = (item) => {
+  const addToCart = item => {
     if (!cart.includes(item.id)) {
       setCart([...cart, item.id]);
     }
@@ -32,14 +52,27 @@ export default function BrowseMedicines() {
         </View>
 
         <View style={styles.iconContainer}>
-          <IconButton icon="cart" size={26} onPress={()=>navigation.navigate("Cart")} iconColor="#1E88E5" />
-          <Image source={require("../../Assets/Images/background.jpg")} style={styles.profileImage} />
+          <IconButton
+            icon="cart"
+            size={26}
+            onPress={() => navigation.navigate('Cart')}
+            iconColor="#1E88E5"
+          />
+          <Image
+            source={require('../../Assets/Images/background.jpg')}
+            style={styles.profileImage}
+          />
         </View>
       </View>
 
       {/* Search Bar with Icon */}
       <View style={styles.searchContainer}>
-        <MaterialIcons name="search" size={22} color="#757575" style={styles.searchIcon} />
+        <MaterialIcons
+          name="search"
+          size={22}
+          color="#757575"
+          style={styles.searchIcon}
+        />
         <TextInput
           style={styles.searchBar}
           placeholder="Search Medicine Ex Paracetamol"
@@ -53,17 +86,24 @@ export default function BrowseMedicines() {
       {/* Medicine List */}
       <FlatList
         data={medicines}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
+        keyExtractor={item => item.id}
+        renderItem={({item}) => (
           <Card style={styles.card}>
             <Text style={styles.medicineName}>{item.name}</Text>
             <Text style={styles.medicineDescription}>{item.description}</Text>
             <Text style={styles.medicinePrice}>{item.price}</Text>
             <View style={styles.buttonContainer}>
-              <Button mode="outlined" onPress={() => addToCart(item)} color="#033c6b">
-                {cart.includes(item.id) ? "Added to Packet" : "Add to Packet"}
+              <Button
+                mode="outlined"
+                style={{borderRadius: 8, }}
+                onPress={() => addToCart(item)}
+                >
+                {cart.includes(item.id) ? 'Added to Packet' : 'Add to Packet'}
               </Button>
-              <Button style={styles.orderButton} mode="contained" color="#033c6b">
+              <Button
+                style={styles.orderButton}
+                mode="contained"
+                color="#033c6b">
                 Order Now
               </Button>
             </View>
@@ -73,7 +113,11 @@ export default function BrowseMedicines() {
 
       {/* Upload Prescription Section */}
       <View style={styles.uploadContainer}>
-        <Button mode="contained" color="#033c6b" style={styles.uploadButton} onPress={() => navigation.navigate("OrderByPrescription")}>
+        <Button
+          mode="contained"
+          color="#033c6b"
+          style={styles.uploadButton}
+          onPress={() => navigation.navigate('OrderByPrescription')}>
           Order By Prescription
         </Button>
       </View>
@@ -84,27 +128,27 @@ export default function BrowseMedicines() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#E3F2FD",
+    backgroundColor: '#E3F2FD',
     padding: 16,
   },
   locationContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 16,
   },
   locationWrapper: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   locationText: {
-    color: "black",
-    fontWeight: "bold",
+    color: 'black',
+    fontWeight: 'bold',
     marginLeft: 5,
   },
   iconContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   profileImage: {
     width: 40,
@@ -113,9 +157,9 @@ const styles = StyleSheet.create({
     marginLeft: 8,
   },
   searchContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#fff",
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#fff',
     borderRadius: 20,
     paddingHorizontal: 12,
     marginBottom: 16,
@@ -129,47 +173,47 @@ const styles = StyleSheet.create({
   },
   medicineLabel: {
     paddingBottom: 10,
-    color: "#033c6b",
+    color: '#033c6b',
   },
   card: {
-    width: "100%",
+    width: '100%',
     padding: 16,
     marginBottom: 8,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     borderRadius: 0,
   },
   medicineName: {
     fontSize: 16,
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   medicineDescription: {
     fontSize: 14,
-    color: "#757575",
+    color: '#757575',
   },
   medicinePrice: {
     fontSize: 14,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     marginVertical: 5,
   },
   buttonContainer: {
-    flexDirection: "row",
-    justifyContent: "space-between",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     marginTop: 8,
   },
   uploadContainer: {
-    width: "100%",
+    width: '100%',
     marginTop: 24,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     padding: 16,
-    alignItems: "center",
+    alignItems: 'center',
   },
   uploadButton: {
-    width: "100%",
-    backgroundColor: "#033c6b",
+    width: '100%',
+    backgroundColor: '#033c6b',
+    borderRadius: 8,
   },
   orderButton: {
-    backgroundColor: "#38b6ff",
+    backgroundColor: '#38b6ff',
+    borderRadius: 8,
   },
 });
-
-

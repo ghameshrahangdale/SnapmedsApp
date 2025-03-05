@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
   },
   Button: {
     backgroundColor: '#033c6b',
+    borderRadius: 8,
   },
 });
 

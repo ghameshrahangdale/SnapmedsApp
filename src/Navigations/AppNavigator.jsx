@@ -3,9 +3,14 @@ import React from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import SplashScreen from '../Screens/SplashScreen';
 import LoginScreen from '../Screens/LoginScreen';
-import SignUp from "../Screens/SignUp";
+import SignUp from '../Screens/SignUp';
 import BrowseMedicines from '../Components/Users/BrowseMedicines';
 import Cart from '../Components/Cart/Cart';
+import JoinAsPartnersScreen from '../Screens/JoinAsPartnersScreen';
+import PharmacyLogin from '../Components/PharmacyPartners/Login/PharmacyLogin';
+import PharmacyRegister from '../Components/PharmacyPartners/Register/PharmacyRegister';
+import DeliveryLogin from '../Components/DeliveryPartner/Login/DeliveryLogin';
+import PharmacyHome from '../Components/PharmacyPartners/PharmacyHome';
 
 const AppNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -16,6 +21,11 @@ const AppNavigator = () => {
       <Stack.Screen name="Signup" component={SignUp} />
       <Stack.Screen name="BrowseMedicines" component={BrowseMedicines} />
       <Stack.Screen name="Cart" component={Cart} />
+      <Stack.Screen name="JoinAsPartners" component={JoinAsPartnersScreen} />
+      <Stack.Screen name="Pharmacy/Login" component={PharmacyLogin} />
+      <Stack.Screen name="Pharmacy/Register" component={PharmacyRegister} />
+      <Stack.Screen name="Delivery/Login" component={DeliveryLogin} />
+      <Stack.Screen name="Pharmacy/Home" component={PharmacyHome} />
     </Stack.Navigator>
   );
 };

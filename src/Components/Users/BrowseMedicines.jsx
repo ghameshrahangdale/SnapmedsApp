@@ -88,7 +88,7 @@ export default function BrowseMedicines() {
         data={medicines}
         keyExtractor={item => item.id}
         renderItem={({item}) => (
-          <Card style={styles.card}>
+          <View style={styles.card}>
             <Text style={styles.medicineName}>{item.name}</Text>
             <Text style={styles.medicineDescription}>{item.description}</Text>
             <Text style={styles.medicinePrice}>{item.price}</Text>
@@ -104,10 +104,10 @@ export default function BrowseMedicines() {
                 style={styles.orderButton}
                 mode="contained"
                 color="#033c6b">
-                Order Now
+                Buy Now
               </Button>
             </View>
-          </Card>
+          </View>
         )}
       />
 
@@ -181,6 +181,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     backgroundColor: '#fff',
     borderRadius: 0,
+    elevation:0,
   },
   medicineName: {
     fontSize: 16,

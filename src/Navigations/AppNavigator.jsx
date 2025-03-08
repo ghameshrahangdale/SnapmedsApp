@@ -11,6 +11,8 @@ import PharmacyLogin from '../Components/PharmacyPartners/Login/PharmacyLogin';
 import PharmacyRegister from '../Components/PharmacyPartners/Register/PharmacyRegister';
 import DeliveryLogin from '../Components/DeliveryPartner/Login/DeliveryLogin';
 import PharmacyHome from '../Components/PharmacyPartners/PharmacyHome';
+import OrderByPrescription from '../Components/Users/OrderByPrescription';
+
 
 const AppNavigator = () => {
   const Stack = createNativeStackNavigator();
@@ -20,12 +22,15 @@ const AppNavigator = () => {
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
       <Stack.Screen name="Signup" component={SignUp} />
       <Stack.Screen name="BrowseMedicines" component={BrowseMedicines} />
+      <Stack.Screen name="OrderByPrescription" component={OrderByPrescription}/>
       <Stack.Screen name="Cart" component={Cart} />
+
       <Stack.Screen name="JoinAsPartners" component={JoinAsPartnersScreen} />
       <Stack.Screen name="Pharmacy/Login" component={PharmacyLogin} />
       <Stack.Screen name="Pharmacy/Register" component={PharmacyRegister} />
-      <Stack.Screen name="Delivery/Login" component={DeliveryLogin} />
       <Stack.Screen name="Pharmacy/Home" component={PharmacyHome} />
+
+      <Stack.Screen name="Delivery/Login" component={DeliveryLogin} />
     </Stack.Navigator>
   );
 };

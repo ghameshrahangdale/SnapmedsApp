@@ -1,15 +1,16 @@
 import React from 'react';
 import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 
 const JoinAsPartnersScreen = () => {
   const navigation = useNavigation();
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.heading}>Join as a Partner</Text>
+    <LinearGradient colors={['#033c6b', '#1b6ca8']} style={styles.container}>
+      <Text style={styles.heading}>Become a Partner</Text>
 
-      {/* Pharmacy Partner Button */}
+      {/* Pharmacy Partner */}
       <TouchableOpacity
         onPress={() => navigation.navigate('Pharmacy/Login')}
         style={styles.button}
@@ -19,11 +20,13 @@ const JoinAsPartnersScreen = () => {
             source={{ uri: 'https://img.freepik.com/premium-vector/pharmacy-with-pharmacist-client-counter_36082-604.jpg' }}
             style={styles.image}
           />
+          <View style={styles.overlay}>
+            <Text style={styles.imageText}>Pharmacy Partner</Text>
+          </View>
         </View>
-        <Text style={styles.text}>Join as Pharmacy Partner</Text>
       </TouchableOpacity>
 
-      {/* Delivery Partner Button */}
+      {/* Delivery Partner */}
       <TouchableOpacity
         onPress={() => navigation.navigate('Delivery/Login')}
         style={styles.button}
@@ -33,10 +36,12 @@ const JoinAsPartnersScreen = () => {
             source={{ uri: 'https://img.freepik.com/premium-vector/way-concept-vector-illustration_1354720-3574.jpg' }}
             style={styles.image}
           />
+          <View style={styles.overlay}>
+            <Text style={styles.imageText}>Delivery Boy</Text>
+          </View>
         </View>
-        <Text style={styles.text}>Join as Delivery Partner</Text>
       </TouchableOpacity>
-    </View>
+    </LinearGradient>
   );
 };
 
@@ -45,38 +50,42 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: '#fff',
     padding: 20,
   },
   heading: {
-    marginBottom: 30,
-    fontWeight: 'bold',
-    fontSize: 25,
-    color:"#38b6ff"
+    marginBottom: 20,
+    fontSize: 26,
+    color: "#38b6ff",
+    fontFamily: 'Poppins-Bold',
   },
   button: {
-    alignItems: 'center',
     marginBottom: 20,
+    width: '100%',
+    alignItems: 'center',
   },
   imageContainer: {
-    width: 200, // Increased size
-    height: 200, // Increased size
-    borderRadius: 100,
-    borderWidth: 2,
-    borderColor: '#38b6ff',
+    width: 300,
+    height: 300,
+    borderRadius: 20,
+    overflow: 'hidden',
     justifyContent: 'center',
     alignItems: 'center',
-    overflow: 'hidden',
-    marginBottom: 10,
   },
   image: {
     width: '100%',
     height: '100%',
     resizeMode: 'cover',
   },
-  text: {
-    fontWeight: 'bold',
-    color: '#333',
+  overlay: {
+    ...StyleSheet.absoluteFillObject,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageText: {
+    color: '#fff',
+    fontSize: 22,
+    fontFamily: 'Poppins-Bold',
   },
 });
 

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "145929342075",
+    "project_id": "snapmeds-app",
+    "storage_bucket": "snapmeds-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:145929342075:android:515e1028b0bba6a9c7e6de",
+        "android_client_info": {
+          "package_name": "com.snapmedsapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCePZ63kXz7Vug6DkZduYe145eDTjXG4a4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,71 +1,119 @@
 import React, {useState} from 'react';
-import {View, Text, TextInput, FlatList, StyleSheet, Image} from 'react-native';
-import {Card, Button, IconButton} from 'react-native-paper';
+import {
+  View,
+  Text,
+  TextInput,
+  FlatList,
+  StyleSheet,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
+import {Card, Button, IconButton, Menu} from 'react-native-paper';
 import {useNavigation} from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import auth from '@react-native-firebase/auth'; // Import Firebase Authentication
 
 export default function BrowseMedicines() {
   const [search, setSearch] = useState('');
   const [cart, setCart] = useState([]);
   const navigation = useNavigation();
+  const [menuVisible, setMenuVisible] = useState(false); // state for menu visibility
 
   const medicines = [
     {
       id: '1',
       name: 'Paracetamol',
-      price: '₹20',
+      price: '20',
       description: 'For fever and pain relief',
     },
     {
       id: '2',
       name: 'Ibuprofen',
-      price: '₹30',
+      price: '30',
       description: 'Anti-inflammatory and pain relief',
     },
     {
       id: '3',
       name: 'Cetirizine',
-      price: '₹15',
+      price: '15',
       description: 'For allergy relief',
     },
     {
       id: '4',
       name: 'Amoxicillin',
-      price: '₹50',
+      price: '50',
       description: 'Antibiotic for infections',
     },
   ];
 
   const addToCart = item => {
-    if (!cart.includes(item.id)) {
-      setCart([...cart, item.id]);
+    if (!cart.some(cartItem => cartItem.id === item.id)) {
+      setCart([...cart, item]);
+    }
+  };
+
+  // Logout function
+  const handleLogout = async () => {
+    try {
+      await auth().signOut();
+      navigation.replace('LoginScreen'); // Redirect to Login screen after logout
+    } catch (error) {
+      console.error('Logout failed:', error);
     }
   };
 
   return (
     <View style={styles.container}>
       {/* Location and Profile Section */}
+      <Text style={{fontFamily: 'Poppins-Medium', fontSize: 12}}>
+        Snapmeds in
+      </Text>
+      <Text
+        style={{
+          fontFamily: 'Poppins-ExtraBold',
+          fontSize: 22,
+          marginBottom: 0,
+        }}>
+        59 Minutes Delivery
+      </Text>
       <View style={styles.locationContainer}>
         <View style={styles.locationWrapper}>
           <MaterialIcons name="location-on" size={22} color="#1E88E5" />
-          <Text style={styles.locationText}>Chhatrapati Square, Nagpur</Text>
+          <Text style={styles.locationText}>Sainath Square, Nagpur</Text>
         </View>
 
         <View style={styles.iconContainer}>
           <IconButton
             icon="cart"
             size={26}
-            onPress={() => navigation.navigate('Cart')}
+            onPress={() => navigation.navigate('Cart', {cart})}
             iconColor="#1E88E5"
           />
-          <Image
-            source={require('../../Assets/Images/background.jpg')}
-            style={styles.profileImage}
-          />
+          <Menu
+            visible={menuVisible}
+            onDismiss={() => setMenuVisible(false)}
+            anchor={
+              <TouchableOpacity onPress={() => setMenuVisible(true)}>
+                <Image
+                  source={require('../../Assets/Images/background.jpg')}
+                  style={styles.profileImage}
+                />
+              </TouchableOpacity>
+            }>
+            <Menu.Item
+              onPress={() => navigation.navigate('MyProfile')}
+              title="My Profile"
+            />
+            <Menu.Item
+              onPress={() => navigation.navigate('Orders')}
+              title="Orders"
+            />
+            <Menu.Item onPress={handleLogout} title="Logout" />
+          </Menu>
         </View>
       </View>
 
-      {/* Search Bar with Icon */}
+      {/* Search Bar */}
       <View style={styles.searchContainer}>
         <MaterialIcons
           name="search"
@@ -91,18 +139,21 @@ export default function BrowseMedicines() {
           <View style={styles.card}>
             <Text style={styles.medicineName}>{item.name}</Text>
             <Text style={styles.medicineDescription}>{item.description}</Text>
-            <Text style={styles.medicinePrice}>{item.price}</Text>
+            <Text style={styles.medicinePrice}>{item.price} ₹</Text>
             <View style={styles.buttonContainer}>
               <Button
                 mode="outlined"
-                style={{borderRadius: 8, }}
-                onPress={() => addToCart(item)}
-                >
-                {cart.includes(item.id) ? 'Added to Packet' : 'Add to Packet'}
+                style={{borderRadius: 8}}
+                labelStyle={{fontFamily: 'Poppins-Regular'}}
+                onPress={() => addToCart(item)}>
+                {cart.some(cartItem => cartItem.id === item.id)
+                  ? 'Added to Packet'
+                  : 'Add to Packet'}
               </Button>
               <Button
                 style={styles.orderButton}
                 mode="contained"
+                labelStyle={{fontFamily: 'Poppins-Regular'}}
                 color="#033c6b">
                 Buy Now
               </Button>
@@ -116,6 +167,7 @@ export default function BrowseMedicines() {
         <Button
           mode="contained"
           color="#033c6b"
+          labelStyle={{fontFamily: 'Poppins-Regular'}}
           style={styles.uploadButton}
           onPress={() => navigation.navigate('OrderByPrescription')}>
           Order By Prescription
@@ -135,7 +187,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 16,
+    marginTop: -16,
   },
   locationWrapper: {
     flexDirection: 'row',
@@ -143,8 +195,8 @@ const styles = StyleSheet.create({
   },
   locationText: {
     color: 'black',
-    fontWeight: 'bold',
     marginLeft: 5,
+    fontFamily: 'Poppins-Regular',
   },
   iconContainer: {
     flexDirection: 'row',
@@ -160,7 +212,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#fff',
-    borderRadius: 20,
+    borderRadius: 10,
     paddingHorizontal: 12,
     marginBottom: 16,
   },
@@ -168,12 +220,13 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   searchBar: {
+    fontFamily: 'Poppins-Regular',
     flex: 1,
-    paddingVertical: 10,
   },
   medicineLabel: {
     paddingBottom: 10,
     color: '#033c6b',
+    fontFamily: 'Poppins-Regular',
   },
   card: {
     width: '100%',
@@ -181,20 +234,21 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     backgroundColor: '#fff',
     borderRadius: 0,
-    elevation:0,
+    elevation: 0,
   },
   medicineName: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontFamily: 'Poppins-Bold',
   },
   medicineDescription: {
     fontSize: 14,
     color: '#757575',
+    fontFamily: 'Poppins-Regular',
   },
   medicinePrice: {
     fontSize: 14,
-    fontWeight: 'bold',
     marginVertical: 5,
+    fontFamily: 'Poppins-Bold',
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -216,5 +270,6 @@ const styles = StyleSheet.create({
   orderButton: {
     backgroundColor: '#38b6ff',
     borderRadius: 8,
+    fontFamily: 'Poppins-Regular',
   },
 });

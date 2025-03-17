@@ -20,7 +20,7 @@ const AppNavigator = () => {
     <Stack.Navigator screenOptions={{headerShown: false}}>
       <Stack.Screen name="SplashScreen" component={SplashScreen} />
       <Stack.Screen name="LoginScreen" component={LoginScreen} />
-      <Stack.Screen name="Signup" component={SignUp} />
+      <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="BrowseMedicines" component={BrowseMedicines} />
       <Stack.Screen name="OrderByPrescription" component={OrderByPrescription}/>
       <Stack.Screen name="Cart" component={Cart} />

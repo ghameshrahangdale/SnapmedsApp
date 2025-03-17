@@ -25,9 +25,9 @@ export default function OrderByPrescription({ navigation }) {
         </View>
         <Text style={styles.title}>Order with Prescription</Text>
         <Text style={styles.subtitle}>
-          Upload prescription and we will deliver your medicines
+          Upload prescription and we will deliver your medicines within 59 minutes
         </Text>
-        <Button mode="contained" style={styles.uploadButton}>
+        <Button mode="contained" labelStyle={{fontFamily:"Poppins-Regular"}} style={styles.uploadButton}>
           Upload Prescription & Checkout
         </Button>
       </View>
@@ -44,7 +44,7 @@ export default function OrderByPrescription({ navigation }) {
       </View>
 
       {/* Bottom Button: Search your medicine */}
-      <Button mode="contained" style={styles.searchButton}>
+      <Button mode="contained" labelStyle={{fontFamily:"Poppins-Regular"}} style={styles.searchButton}>
         Search your medicine
       </Button>
     </View>
@@ -77,6 +77,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: '#1E88E5',
     marginLeft: 8,
+    fontFamily: 'Poppins-Regular',
   },
   iconContainerHeader: {
     flexDirection: 'row',
@@ -104,16 +105,17 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
     color: '#033c6b',
     marginBottom: 8,
     textAlign: 'center',
+    fontFamily: 'Poppins-Bold',
   },
   subtitle: {
     fontSize: 14,
     color: '#757575',
     textAlign: 'center',
     marginBottom: 16,
+    fontFamily:"Poppins-Regular",
   },
   uploadButton: {
     backgroundColor: '#033c6b',
@@ -135,5 +137,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     color: '#333',
     marginBottom: 8,
+    fontFamily: 'Poppins-Regular',
   },
 });

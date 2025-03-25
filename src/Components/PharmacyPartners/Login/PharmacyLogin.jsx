@@ -1,95 +1,138 @@
-import React, {useState} from 'react';
-import {View, StyleSheet, TouchableOpacity} from 'react-native';
-import {Text, TextInput, Button} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
+import React, { useState } from "react";
+import { View, Text, Image, TouchableOpacity, TextInput } from "react-native";
+import LinearGradient from "react-native-linear-gradient";
+import { useNavigation } from "@react-navigation/native";
+import Icon from "react-native-vector-icons/MaterialIcons"; // Import Icon
 
-const PharmacyLogin = () => {
-  const navigation = useNavigation();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+const PharmacyLogin = ({ navigation }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   return (
     <View style={styles.container}>
-      <Text variant="headlineMedium" style={styles.titleMedium}>
-        Welcome Back to Snapmeds!
-      </Text>
-      <Text variant="headlineSmall" style={styles.title}>
-        Login to your Pharmacy Partner Account
-      </Text>
+      <LinearGradient colors={["#0B3D2E", "#117A65"]} style={styles.textContainer}>
+        <Image
+          source={require('../../../Assets/Images/flash.png')}
+          style={styles.logo}
+        />
+        <Text style={styles.heading}>Login with your Pharmacy account</Text>
 
-      <TextInput
-        label="Enter your email"
-        mode="flat"
-        value={email}
-        onChangeText={setEmail}
-        style={styles.input}
-        keyboardType="email-address"
-      />
+        <TouchableOpacity onPress={() => navigation.navigate('PharmacyRegister')}>
+          <Text style={styles.loginText}>Want to Register your Pharmacy? Register here</Text>
+        </TouchableOpacity>
+      </LinearGradient>
 
-      <TextInput
-        label="Enter your password"
-        mode="flat"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-        style={styles.input}
-      />
+      <View style={styles.mainContainer}>
+        {/* Email Input with Icon */}
+        <Text style={styles.label}>Email</Text>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Email"
+            placeholderTextColor="#666"
+            value={email}
+            onChangeText={setEmail}
+          />
+          <Icon name="email" size={20} color="#666" style={styles.inputIcon} />
+        </View>
 
-      <TouchableOpacity onPress={() => console.log('Forgot Password?')}>
-        <Text style={styles.forgotPassword}>Forgot Password?</Text>
-      </TouchableOpacity>
+        {/* Password Input with Icon */}
+        <Text style={styles.label}>Password</Text>
+        <View style={styles.inputContainer}>
+          <TextInput
+            style={styles.input}
+            placeholder="Password"
+            placeholderTextColor="#666"
+            secureTextEntry
+            value={password}
+            onChangeText={setPassword}
+          />
+          <Icon name="lock" size={20} color="#666" style={styles.inputIcon} />
+        </View>
 
-      <Button
-        mode="contained"
-        style={styles.button}
-        onPress={() => console.log('Login Pressed')}>
-        Login
-      </Button>
+        {/* Forgot Password */}
+        <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}>
+          <Text style={styles.forgotPassword}>Forgot Password?</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity onPress={() => navigation.navigate('Pharmacy/Register')}>
-        <Text style={styles.register}>Don't have an account? Register</Text>
-      </TouchableOpacity>
+        {/* Login Button */}
+        <TouchableOpacity style={styles.button}>
+          <Text style={styles.buttonText}>Login</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
+const styles = {
   container: {
+    backgroundColor: "#000",
     flex: 1,
-    justifyContent: 'center',
-    padding: 20,
-    backgroundColor: '#ecfcff', // Light blue background
   },
-  titleMedium: {
-    textAlign: 'center',
-    color: '#38b6ff',
-    fontWeight: 'bold',
+  textContainer: {
+    padding: 32,
+    backgroundColor: "#fff",
+    height: 263,
   },
-  title: {
-    textAlign: 'center',
-    marginBottom: 20,
-    fontSize: 18,
+  mainContainer: {
+    padding: 32,
+    backgroundColor: "#fff",
+    height: "100%",
+  },
+  heading: {
+    fontSize: 32,
+    color: "#fff",
+    fontFamily: "Poppins-Bold",
+  },
+  logo: { width: 30, height: 30, marginTop: 20, marginBottom: 20 },
+  loginText: {
+    color: "#fff",
+    fontFamily: "Poppins-Regular",
+    fontSize: 12,
+  },
+  label: {
+    fontSize: 16,
+    fontFamily: "Poppins-Regular",
+    color: "#333",
+    marginBottom: 4,
+  },
+  inputContainer: {
+    flexDirection: "row",
+    alignItems: "center",
+    borderWidth: 1,
+    borderColor: "#ccc",
+    borderRadius: 8,
+    paddingHorizontal: 10,
+    marginBottom: 12,
+  },
+  inputIcon: {
+    marginRight: 8,
   },
   input: {
-    marginBottom: 15,
-    backgroundColor: '#fff', // White input background
+    flex: 1,
+    paddingVertical: 12,
+    fontSize: 16,
+    fontFamily: "Poppins-Regular",
+    color: "#333",
   },
   forgotPassword: {
-    textAlign: 'left',
-    color: '#033c6b',
-    marginBottom: 10,
+    fontSize: 12,
+    fontFamily: "Poppins-Regular",
+    color: "#117A65",
+    alignSelf: "flex-end",
+    marginBottom: 16,
   },
   button: {
-    backgroundColor: '#033c6b', // Dark blue primary button
+    backgroundColor: "#117A65",
+    padding: 12,
     borderRadius: 8,
-    marginBottom: 10,
+    alignItems: "center",
   },
-  register: {
-    textAlign: 'center',
-    color: '#033c6b',
-    marginTop: 15,
-    fontWeight: 'bold',
+  buttonText: {
+    color: "#fff",
+    fontSize: 16,
+    fontFamily: "Poppins-Medium",
   },
-});
+};
 
 export default PharmacyLogin;

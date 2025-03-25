@@ -10,7 +10,7 @@ import JoinAsPartnersScreen from '../Screens/JoinAsPartnersScreen';
 import PharmacyLogin from '../Components/PharmacyPartners/Login/PharmacyLogin';
 import PharmacyRegister from '../Components/PharmacyPartners/Register/PharmacyRegister';
 import DeliveryLogin from '../Components/DeliveryPartner/Login/DeliveryLogin';
-import PharmacyHome from '../Components/PharmacyPartners/PharmacyHome';
+import PharmacyDashboard from '../Components/PharmacyPartners/PharmacyDashboard';
 import OrderByPrescription from '../Components/Users/OrderByPrescription';
 
 
@@ -27,8 +27,8 @@ const AppNavigator = () => {
 
       <Stack.Screen name="JoinAsPartners" component={JoinAsPartnersScreen} />
       <Stack.Screen name="Pharmacy/Login" component={PharmacyLogin} />
-      <Stack.Screen name="Pharmacy/Register" component={PharmacyRegister} />
-      <Stack.Screen name="Pharmacy/Home" component={PharmacyHome} />
+      <Stack.Screen name="PharmacyRegister" component={PharmacyRegister} />
+      <Stack.Screen name="PharmacyDashboard" component={PharmacyDashboard} />
 
       <Stack.Screen name="Delivery/Login" component={DeliveryLogin} />
     </Stack.Navigator>

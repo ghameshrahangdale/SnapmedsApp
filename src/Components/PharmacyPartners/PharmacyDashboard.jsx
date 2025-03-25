@@ -11,7 +11,7 @@ import {
   Divider,
 } from 'react-native-paper';
 
-const PharmacyHome = () => {
+const PharmacyDashboard = () => {
   const [menuVisible, setMenuVisible] = useState(false);
 
   const openMenu = () => setMenuVisible(true);
@@ -192,4 +192,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default PharmacyHome;
+export default PharmacyDashboard;

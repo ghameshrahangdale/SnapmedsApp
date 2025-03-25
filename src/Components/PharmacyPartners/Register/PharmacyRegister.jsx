@@ -1,130 +1,224 @@
-import React, { useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { TextInput, Button, Text, ProgressBar } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import React, {useState} from 'react';
+import {View, Text, Image, TouchableOpacity, TextInput} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import {useNavigation} from '@react-navigation/native';
 
-const PharmacyRegister = () => {
-  const navigation = useNavigation();
+const PharmacyRegister = ({navigation}) => {
+  const navigate = useNavigation();
   const [step, setStep] = useState(1);
+  const [formData, setFormData] = useState({
+    firstName: 'Ghamesh',
+    lastName: 'Rahangdale',
+    email: 'pharmacy@snapmeds.com',
+    phone: '7264832848',
+    pharmacyName: 'Nagpure Medical Store',
+    pharmacyType: 'Retail',
+    isOpen: 'Yes',
+    licenceNumber: 'MH12345678',
+    gstNumber: '29ABCDE1234F1Z5',
+    fullAddress: 'Medical Square, Nagpur, Maharashtra, India',
+    city: 'Mumbai',
+    state: 'Maharashtra',
+    postalCode: '441911',
+    password: '',
+    confirmPassword: '',
+  });
 
-  // Step 1: Basic Information
-  const [pharmacyName, setPharmacyName] = useState('');
-  const [ownerName, setOwnerName] = useState('');
-  const [email, setEmail] = useState('');
-  const [phone, setPhone] = useState('');
-  const [password, setPassword] = useState('');
+  const handleNext = () => {
+    if (step < 4) setStep(step + 1);
+  };
 
-  // Step 2: Business Details
-  const [licenseNumber, setLicenseNumber] = useState('');
-  const [gstNumber, setGstNumber] = useState('');
-  const [drugLicense, setDrugLicense] = useState(null);
-  const [businessCertificate, setBusinessCertificate] = useState(null);
+  const handleBack = () => {
+    if (step > 1) setStep(step - 1);
+  };
 
-  // Step 3: Pharmacy Address
-  const [shopAddress, setShopAddress] = useState('');
-  const [city, setCity] = useState('');
-  const [state, setState] = useState('');
-  const [pincode, setPincode] = useState('');
-  const [mapLocation, setMapLocation] = useState('');
-
-  const nextStep = () => setStep(step + 1);
-  const prevStep = () => setStep(step - 1);
+  const handleChange = (name, value) => {
+    setFormData({...formData, [name]: value});
+  };
 
   return (
     <View style={styles.container}>
-      <Text variant="headlineMedium" style={styles.titleMedium}>
-        Register Your Pharmacy
-      </Text>
-      <Text variant="headlineSmall" style={styles.title}>
-        Step {step} of 3
-      </Text>
-      <ProgressBar progress={step / 3} color="#033c6b" style={styles.progressBar} />
-
-      {step === 1 && (
-        <>
-          <TextInput label="Pharmacy Name" value={pharmacyName} onChangeText={setPharmacyName} style={styles.input} />
-          <TextInput label="Owner's Full Name" value={ownerName} onChangeText={setOwnerName} style={styles.input} />
-          <TextInput label="Email Address" value={email} onChangeText={setEmail} style={styles.input} keyboardType="email-address" />
-          <TextInput label="Phone Number" value={phone} onChangeText={setPhone} style={styles.input} keyboardType="phone-pad" />
-          <TextInput label="Password" value={password} onChangeText={setPassword} style={styles.input} secureTextEntry />
-        </>
-      )}
-
-      {step === 2 && (
-        <>
-          <TextInput label="Pharmacy License Number" value={licenseNumber} onChangeText={setLicenseNumber} style={styles.input} />
-          <TextInput label="GST Number (Optional)" value={gstNumber} onChangeText={setGstNumber} style={styles.input} />
-          <Button mode="outlined" onPress={() => console.log('Upload Drug License')} style={styles.uploadButton}>
-            Upload Drug License Certificate
-          </Button>
-          <Button mode="outlined" onPress={() => console.log('Upload Business Certificate')} style={styles.uploadButton}>
-            Upload Business Registration Certificate
-          </Button>
-        </>
-      )}
-
-      {step === 3 && (
-        <>
-          <TextInput label="Shop Address" value={shopAddress} onChangeText={setShopAddress} style={styles.input} />
-          <TextInput label="City" value={city} onChangeText={setCity} style={styles.input} />
-          <TextInput label="State" value={state} onChangeText={setState} style={styles.input} />
-          <TextInput label="Pincode" value={pincode} onChangeText={setPincode} style={styles.input} keyboardType="numeric" />
-          <TextInput label="Google Map Location (Optional)" value={mapLocation} onChangeText={setMapLocation} style={styles.input} />
-        </>
-      )}
-
-      <View style={styles.buttonContainer}>
-        {step > 1 && <Button mode="contained" onPress={prevStep} style={styles.button}>Back</Button>}
-        {step < 3 ? (
-          <Button mode="contained" onPress={nextStep} style={styles.button}>Next</Button>
-        ) : (
-          <Button mode="contained" onPress={() => navigation.navigate('Pharmacy/Home')} style={styles.button}>
-            Register
-          </Button>
+      <LinearGradient
+        colors={['#0B3D2E', '#117A65']}
+        style={styles.textContainer}>
+        <Image
+          source={require('../../../Assets/Images/flash.png')}
+          style={styles.logo}
+        />
+        <Text style={styles.heading}>Register Your Pharmacy</Text>
+        <TouchableOpacity onPress={() => navigation.navigate('Pharmacy/Login')}>
+          <Text style={styles.loginText}>Already Registered? Login here</Text>
+        </TouchableOpacity>
+      </LinearGradient>
+      <View style={styles.mainContainer}>
+        {step === 1 && (
+          <>
+            <Text style={styles.subheading}>Owner's Details</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="First Name"
+              value={formData.firstName}
+              onChangeText={text => handleChange('firstName', text)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Last Name"
+              value={formData.lastName}
+              onChangeText={text => handleChange('lastName', text)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              value={formData.email}
+              onChangeText={text => handleChange('email', text)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Phone"
+              value={formData.phone}
+              onChangeText={text => handleChange('phone', text)}
+            />
+          </>
         )}
+        {step === 2 && (
+          <>
+            <Text style={styles.subheading}>Pharmacy's Details</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Pharmacy Name"
+              value={formData.pharmacyName}
+              onChangeText={text => handleChange('pharmacyName', text)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Pharmacy Licence Number"
+              value={formData.licenceNumber}
+              onChangeText={text => handleChange('licenceNumber', text)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="GST Number"
+              value={formData.gstNumber}
+              onChangeText={text => handleChange('gstNumber', text)}
+            />
+          </>
+        )}
+        {step === 3 && (
+          <>
+            <Text style={styles.subheading}>Pharmacy's Address</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Full Address"
+              value={formData.fullAddress}
+              onChangeText={text => handleChange('fullAddress', text)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="City"
+              value={formData.city}
+              onChangeText={text => handleChange('city', text)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="State"
+              value={formData.state}
+              onChangeText={text => handleChange('state', text)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Postal Code"
+              value={formData.postalCode}
+              onChangeText={text => handleChange('postalCode', text)}
+            />
+          </>
+        )}
+        {step === 4 && (
+          <>
+            <Text style={styles.subheading}>Create Strong Password</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Email"
+              value={formData.email}
+              editable={false}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Password"
+              secureTextEntry
+              value={formData.password}
+              onChangeText={text => handleChange('password', text)}
+            />
+            <TextInput
+              style={styles.input}
+              placeholder="Confirm Password"
+              secureTextEntry
+              value={formData.confirmPassword}
+              onChangeText={text => handleChange('confirmPassword', text)}
+            />
+          </>
+        )}
+        <View style={styles.buttonContainer}>
+          {step > 1 && (
+            <TouchableOpacity style={styles.button} onPress={handleBack}>
+              <Text style={styles.buttonText}>Back</Text>
+            </TouchableOpacity>
+          )}
+          <TouchableOpacity style={styles.button} onPress={handleNext}>
+            <Text style={styles.buttonText}>
+              {step === 4 ? 'Register' : 'Next'}
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </View>
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    padding: 20,
-    backgroundColor: '#ecfcff',
-  },
-  titleMedium: {
-    textAlign: 'center',
-    color: "#38b6ff",
-    fontWeight: 'bold',
-  },
-  title: {
-    textAlign: 'center',
-    marginBottom: 10,
-    fontSize: 18,
-  },
-  progressBar: {
+const styles = {
+  container: {backgroundColor: '#000', flex: 1},
+  textContainer: {padding: 32, height: 263},
+  mainContainer: {padding: 32, backgroundColor: '#fff', height: '100%'},
+  heading: {fontSize: 32, color: '#fff', fontFamily: 'Poppins-Bold'},
+  subheading: {
+    fontSize: 20,
+    color: '#117A65',
+    fontFamily: 'Poppins-Bold',
     marginBottom: 20,
-    height: 6,
+  },
+  logo: {width: 30, height: 30, marginTop: 20, marginBottom: 20},
+  loginText: {
+    color: '#fff', 
+    fontFamily: 'Poppins-Regular', 
+    fontSize: 12
   },
   input: {
-    marginBottom: 15,
-    backgroundColor: '#fff',
-  },
-  uploadButton: {
-    marginBottom: 10,
-    borderColor: '#033c6b',
+    width: '100%',
+    padding: 12,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 8,
+    marginBottom: 12,
+    fontSize: 16,
+    fontFamily: 'Poppins-Regular',
   },
   buttonContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginTop: 20,
   },
   button: {
-    backgroundColor: '#033c6b',
+    backgroundColor: '#117A65',
+    padding: 12,
     borderRadius: 8,
-    marginTop: 10,
+    alignItems: 'center',
+    flex: 1,
+    marginHorizontal: 5,
   },
-});
+  buttonText: {
+    color: '#fff', 
+    fontSize: 16, 
+    fontFamily: 'Poppins-Regular'
+  },
+};
 
 export default PharmacyRegister;

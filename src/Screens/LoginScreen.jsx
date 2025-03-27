@@ -2,39 +2,38 @@ import React, {useState} from 'react';
 import {
   View,
   StyleSheet,
-  Image,
+  Text,
+  TextInput,
   TouchableOpacity,
+  Image,
   ActivityIndicator,
+  Alert,
 } from 'react-native';
-import {TextInput, Button, Text, Snackbar} from 'react-native-paper';
+import LinearGradient from 'react-native-linear-gradient';
 import {useNavigation} from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const LoginScreen = () => {
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
-  const [snackbarVisible, setSnackbarVisible] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
 
   const handleLogin = async () => {
     if (!email || !password) {
-      setSnackbarMessage('Please enter both email and password.');
-      setSnackbarVisible(true);
+      Alert.alert('Error', 'Please enter both email and password.');
       return;
     }
 
     setLoading(true);
     try {
       await auth().signInWithEmailAndPassword(email, password);
-      setSnackbarMessage('Login Successful! Welcome.');
-      setSnackbarVisible(true);
+      Alert.alert('Success', 'Login Successful! Welcome.');
       navigation.navigate('BrowseMedicines');
     } catch (error) {
       console.error('Login Error:', error);
-      setSnackbarMessage('Invalid credentials. Please try again.');
-      setSnackbarVisible(true);
+      Alert.alert('Error', 'Invalid credentials. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -42,8 +41,10 @@ const LoginScreen = () => {
 
   return (
     <View style={styles.container}>
-      {/* Logo & Title Section */}
-      <View style={styles.logoContainer}>
+      {/* Logo & Title Section with Linear Gradient */}
+      <LinearGradient
+        colors={['#033c6b', '#1b6ca8']}
+        style={styles.logoContainer}>
         <Image
           source={require('../Assets/Images/flash.png')}
           style={styles.logo}
@@ -55,30 +56,42 @@ const LoginScreen = () => {
             <Text style={styles.signUpLink}>Sign Up</Text>
           </Text>
         </TouchableOpacity>
-      </View>
+      </LinearGradient>
 
       {/* Form Section */}
       <View style={styles.formContainer}>
         <Text style={styles.inputLabel}>Email</Text>
-        <TextInput
-          label="Email"
-          mode="outlined"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-          style={styles.input}
-        />
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Email"
+            value={email}
+            onChangeText={setEmail}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            style={styles.input}
+            placeholderTextColor="#6C7278"
+          />
+          <Ionicons name="mail" size={20} color="#6C7278" style={styles.icon} />
+        </View>
 
         <Text style={styles.inputLabel}>Password</Text>
-        <TextInput
-          label="Password"
-          mode="outlined"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-          style={styles.input}
-        />
+        <View style={styles.inputContainer}>
+          
+          <TextInput
+            placeholder="Password"
+            value={password}
+            onChangeText={setPassword}
+            secureTextEntry
+            style={styles.input}
+            placeholderTextColor="#6C7278"
+          />
+          <Ionicons
+            name="lock-closed"
+            size={20}
+            color="#6C7278"
+            style={styles.icon}
+          />
+        </View>
 
         {/* Forgot Password Link */}
         <View style={styles.rowContainer}>
@@ -88,45 +101,34 @@ const LoginScreen = () => {
         </View>
 
         {/* Login Button with Activity Indicator */}
-        <Button
-          mode="contained"
-          labelStyle={{fontFamily: 'Poppins-Regular'}}
-          style={styles.button}
+        <TouchableOpacity
+          style={[styles.button, loading && styles.disabledButton]}
           onPress={handleLogin}
           disabled={loading}>
-          {loading ? <ActivityIndicator color="#fff" /> : 'Sign In'}
-        </Button>
+          {loading ? (
+            <ActivityIndicator size="small" color="#fff" />
+          ) : (
+            <Text style={styles.buttonText}>Sign In</Text>
+          )}
+        </TouchableOpacity>
 
         {/* Alternative Login Option */}
         <Text style={styles.orText}>-- Or login with --</Text>
-        <View style={styles.socialButtons}>
-          <Button
-            mode="outlined"
-            labelStyle={{fontFamily: 'Poppins-Regular'}}
-            style={styles.buttonGoogle}
-            icon="google">
-            Continue with Google
-          </Button>
-        </View>
+        <TouchableOpacity style={styles.buttonGoogle}>
+          <Text style={styles.buttonGoogleText}>Continue with Google</Text>
+        </TouchableOpacity>
+
         <TouchableOpacity onPress={() => navigation.navigate('JoinAsPartners')}>
           <Text style={styles.partnerText}>Partner With Us</Text>
         </TouchableOpacity>
       </View>
-
-      {/* Snackbar for Login Success/Failure Messages */}
-      <Snackbar
-        visible={snackbarVisible}
-        onDismiss={() => setSnackbarVisible(false)}
-        duration={3000}>
-        {snackbarMessage}
-      </Snackbar>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#033c6b'},
-  logoContainer: {height: 263, padding: 32},
+  container: {flex: 1, backgroundColor: '#f5f5f5'},
+  logoContainer: {height: 260, padding: 32, justifyContent: 'center'},
   logo: {width: 30, height: 30, marginTop: 20, marginBottom: 20},
   title: {
     fontSize: 32,
@@ -140,6 +142,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#fff',
     padding: 32,
+    borderTopLeftRadius: 30,
+    borderTopRightRadius: 30,
   },
   signUpText: {
     color: '#FFFFFF',
@@ -158,16 +162,31 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     width: '100%',
-    fontSize: 12,
+    fontSize: 16,
     color: '#6C7278',
     marginBottom: 5,
     fontFamily: 'Poppins-Medium',
   },
-  input: {
+  inputContainer: {
     width: '100%',
-    backgroundColor: '#fff',
+    flexDirection: 'row',
+    alignItems: 'center',
+    borderColor: '#ccc',
+    borderWidth: 1,
+    borderRadius: 8,
     marginBottom: 15,
-    borderRadius: 10,
+    paddingHorizontal: 10,
+    backgroundColor: '#fff',
+  },
+  icon: {
+    marginRight: 8,
+  },
+  input: {
+    flex: 1,
+    paddingVertical: 12,
+    fontFamily: 'Poppins-Regular',
+    fontSize: 14,
+    color: '#333',
   },
   rowContainer: {
     width: '100%',
@@ -182,16 +201,33 @@ const styles = StyleSheet.create({
   button: {
     width: '100%',
     backgroundColor: '#38b6ff',
-    padding: 5,
+    padding: 12,
     marginVertical: 10,
     borderRadius: 10,
+    alignItems: 'center',
+  },
+  disabledButton: {
+    backgroundColor: '#6C7278',
+  },
+  buttonText: {
+    color: '#fff',
+    fontFamily: 'Poppins-Regular',
+    fontSize: 14,
   },
   buttonGoogle: {
     width: '100%',
-    padding: 5,
+    backgroundColor: '#fff',
+    padding: 12,
     marginVertical: 10,
     borderRadius: 10,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    alignItems: 'center',
+  },
+  buttonGoogleText: {
     color: '#000',
+    fontFamily: 'Poppins-Regular',
+    fontSize: 14,
   },
   orText: {
     color: '#6C7278',

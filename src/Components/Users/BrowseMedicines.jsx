@@ -1,92 +1,63 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
   TextInput,
-  FlatList,
   StyleSheet,
   Image,
   TouchableOpacity,
 } from 'react-native';
-import {Card, Button, IconButton, Menu} from 'react-native-paper';
-import {useNavigation} from '@react-navigation/native';
+import { Card, Button, IconButton, Menu } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import auth from '@react-native-firebase/auth'; // Import Firebase Authentication
+import LinearGradient from 'react-native-linear-gradient';
+import auth from '@react-native-firebase/auth';
+import LocationPicker from './LocationPicker';
 
 export default function BrowseMedicines() {
   const [search, setSearch] = useState('');
   const [cart, setCart] = useState([]);
   const navigation = useNavigation();
-  const [menuVisible, setMenuVisible] = useState(false); // state for menu visibility
+  const [location, setLocation] = useState('Choose Your Location');
+  const [locationVisible, setLocationVisible] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [activeTab, setActiveTab] = useState('home');
 
-  const medicines = [
-    {
-      id: '1',
-      name: 'Paracetamol',
-      price: '20',
-      description: 'For fever and pain relief',
-    },
-    {
-      id: '2',
-      name: 'Ibuprofen',
-      price: '30',
-      description: 'Anti-inflammatory and pain relief',
-    },
-    {
-      id: '3',
-      name: 'Cetirizine',
-      price: '15',
-      description: 'For allergy relief',
-    },
-    {
-      id: '4',
-      name: 'Amoxicillin',
-      price: '50',
-      description: 'Antibiotic for infections',
-    },
-  ];
-
-  const addToCart = item => {
-    if (!cart.some(cartItem => cartItem.id === item.id)) {
-      setCart([...cart, item]);
-    }
-  };
 
   // Logout function
   const handleLogout = async () => {
     try {
       await auth().signOut();
-      navigation.replace('LoginScreen'); // Redirect to Login screen after logout
+      navigation.replace('LoginScreen');
     } catch (error) {
       console.error('Logout failed:', error);
     }
   };
 
-  return (
-    <View style={styles.container}>
-      {/* Location and Profile Section */}
-      <Text style={{fontFamily: 'Poppins-Medium', fontSize: 12}}>
+  // Home Tab
+  const HomeRoute = () => (
+    <LinearGradient
+      colors={['#1E88E5', '#E3F2FD', '#E3F2FD', '#E3F2FD', '#E3F2FD']}
+      style={styles.container}>
+      <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 12, color: '#fff' }}>
         Snapmeds in
       </Text>
-      <Text
-        style={{
-          fontFamily: 'Poppins-ExtraBold',
-          fontSize: 22,
-          marginBottom: 0,
-        }}>
+      <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 22, color: '#fff' }}>
         59 Minutes Delivery
       </Text>
       <View style={styles.locationContainer}>
-        <View style={styles.locationWrapper}>
+        <TouchableOpacity
+          style={styles.locationWrapper}
+          onPress={() => setLocationVisible(true)}>
           <MaterialIcons name="location-on" size={22} color="#1E88E5" />
-          <Text style={styles.locationText}>Sainath Square, Nagpur</Text>
-        </View>
-
+          <Text style={styles.locationText}>{location}</Text>
+          <MaterialIcons name="keyboard-arrow-down" size={18} color="#fff" />
+        </TouchableOpacity>
         <View style={styles.iconContainer}>
           <IconButton
             icon="cart"
             size={26}
-            onPress={() => navigation.navigate('Cart', {cart})}
+            onPress={() => navigation.navigate('Cart', { cart })}
             iconColor="#1E88E5"
           />
           <Menu
@@ -100,14 +71,8 @@ export default function BrowseMedicines() {
                 />
               </TouchableOpacity>
             }>
-            <Menu.Item
-              onPress={() => navigation.navigate('MyProfile')}
-              title="My Profile"
-            />
-            <Menu.Item
-              onPress={() => navigation.navigate('Orders')}
-              title="Orders"
-            />
+            <Menu.Item onPress={() => navigation.navigate('MyProfile')} title="My Profile" />
+            <Menu.Item onPress={() => navigation.navigate('Orders')} title="Orders" />
             <Menu.Item onPress={handleLogout} title="Logout" />
           </Menu>
         </View>
@@ -115,72 +80,154 @@ export default function BrowseMedicines() {
 
       {/* Search Bar */}
       <View style={styles.searchContainer}>
-        <MaterialIcons
-          name="search"
-          size={22}
-          color="#757575"
-          style={styles.searchIcon}
-        />
+        <MaterialIcons name="search" size={22} color="#757575" style={styles.searchIcon} />
         <TextInput
           style={styles.searchBar}
           placeholder="Search Medicine Ex Paracetamol"
           value={search}
           onChangeText={setSearch}
+          placeholderTextColor="#B0BEC5"
         />
       </View>
 
-      <Text style={styles.medicineLabel}>Medicines</Text>
-
-      {/* Medicine List */}
-      <FlatList
-        data={medicines}
-        keyExtractor={item => item.id}
-        renderItem={({item}) => (
-          <View style={styles.card}>
-            <Text style={styles.medicineName}>{item.name}</Text>
-            <Text style={styles.medicineDescription}>{item.description}</Text>
-            <Text style={styles.medicinePrice}>{item.price} ₹</Text>
-            <View style={styles.buttonContainer}>
-              <Button
-                mode="outlined"
-                style={{borderRadius: 8}}
-                labelStyle={{fontFamily: 'Poppins-Regular'}}
-                onPress={() => addToCart(item)}>
-                {cart.some(cartItem => cartItem.id === item.id)
-                  ? 'Added to Packet'
-                  : 'Add to Packet'}
-              </Button>
-              <Button
-                style={styles.orderButton}
-                mode="contained"
-                labelStyle={{fontFamily: 'Poppins-Regular'}}
-                color="#033c6b">
-                Buy Now
-              </Button>
-            </View>
-          </View>
-        )}
-      />
+      {/* Search by Categories Section */}
+      <View style={styles.categoriesContainer}>
+        <Text style={styles.categoriesTitle}>Search by Categories</Text>
+        <View style={styles.categoriesList}>
+          {[
+            { name: 'Pain Relief' },
+            { name: 'Cold & Cough' },
+            { name: 'Diabetes' },
+            { name: 'Heart Care' },
+            { name: 'Vitamins' },
+            { name: 'Skin Care' },
+            { name: 'Weight Management' },
+            { name: 'Immunity Boosters' },
+          ].map((category, index) => (
+            <TouchableOpacity
+              key={index}
+              style={styles.categoryItem}
+              onPress={() => console.log(`Selected: ${category.name}`)}>
+              <Text style={styles.categoryName}>{category.name}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      </View>
 
       {/* Upload Prescription Section */}
       <View style={styles.uploadContainer}>
+        <Text style={styles.uploadText}>Order with Prescription</Text>
+        <Text style={styles.SubText}>Upload Prescription and we will deliver medicine at your door step</Text>
+
         <Button
           mode="contained"
           color="#033c6b"
-          labelStyle={{fontFamily: 'Poppins-Regular'}}
+          labelStyle={{ fontFamily: 'Poppins-Regular' }}
           style={styles.uploadButton}
           onPress={() => navigation.navigate('OrderByPrescription')}>
-          Order By Prescription
+          Upload Prescription
         </Button>
+      </View>
+
+      {/* Location Picker Modal */}
+      <LocationPicker
+        visible={locationVisible}
+        onClose={() => setLocationVisible(false)}
+        onSelect={setLocation}
+      />
+    </LinearGradient>
+  );
+
+  // Dummy route handlers for other tabs
+  const CategoriesRoute = () => (
+    <View style={styles.centeredContainer}>
+      <Text style={styles.placeholderText}>Browse Categories</Text>
+    </View>
+  );
+
+  const UploadRoute = () => (
+    <View style={styles.centeredContainer}>
+      <Text style={styles.placeholderText}>Upload Prescription</Text>
+    </View>
+  );
+
+  const CartRoute = () => (
+    <View style={styles.centeredContainer}>
+      <Text style={styles.placeholderText}>Cart Items</Text>
+    </View>
+  );
+
+  const AccountRoute = () => (
+    <View style={styles.centeredContainer}>
+      <Text style={styles.placeholderText}>Account Information</Text>
+      <Button
+        mode="outlined"
+        onPress={handleLogout}
+        style={{ marginTop: 20 }}
+        labelStyle={{ fontFamily: 'Poppins-Regular', color: '#033c6b' }}>
+        Logout
+      </Button>
+    </View>
+  );
+
+  // Renders the correct content based on the selected tab
+  const renderScene = () => {
+    switch (activeTab) {
+      case 'home':
+        return <HomeRoute />;
+      case 'categories':
+        return <CategoriesRoute />;
+      case 'upload':
+        return <UploadRoute />;
+      case 'cart':
+        return <CartRoute />;
+      case 'account':
+        return <AccountRoute />;
+      default:
+        return <HomeRoute />;
+    }
+  };
+
+  return (
+    <View style={{ flex: 1 }}>
+      {renderScene()}
+
+      {/* Custom Bottom Navigation */}
+      <View style={styles.bottomNav}>
+        {[
+          { key: 'home', title: 'Home', icon: 'home' },
+          { key: 'categories', title: 'Categories', icon: 'apps' },
+          { key: 'upload', title: 'Upload RX', icon: 'file-upload' },
+          { key: 'cart', title: 'Cart', icon: 'shopping-cart' },
+          { key: 'account', title: 'Account', icon: 'person' },
+        ].map(route => (
+          <TouchableOpacity
+            key={route.key}
+            style={styles.navItem}
+            onPress={() => setActiveTab(route.key)}>
+            <MaterialIcons
+              name={route.icon}
+              size={26}
+              color={activeTab === route.key ? '#1E88E5' : '#fff'}
+            />
+            <Text
+              style={[
+                styles.labelText,
+                { color: activeTab === route.key ? '#1E88E5' : '#fff' },
+              ]}>
+              {route.title}
+            </Text>
+          </TouchableOpacity>
+        ))}
       </View>
     </View>
   );
 }
 
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#E3F2FD',
     padding: 16,
   },
   locationContainer: {
@@ -194,7 +241,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   locationText: {
-    color: 'black',
+    color: '#fff',
     marginLeft: 5,
     fontFamily: 'Poppins-Regular',
   },
@@ -215,6 +262,7 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     paddingHorizontal: 12,
     marginBottom: 16,
+    marginTop: 16,
   },
   searchIcon: {
     marginRight: 8,
@@ -223,53 +271,93 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     flex: 1,
   },
-  medicineLabel: {
-    paddingBottom: 10,
-    color: '#033c6b',
-    fontFamily: 'Poppins-Regular',
-  },
-  card: {
-    width: '100%',
-    padding: 16,
-    marginBottom: 8,
-    backgroundColor: '#fff',
-    borderRadius: 0,
-    elevation: 0,
-  },
-  medicineName: {
-    fontSize: 16,
-    fontFamily: 'Poppins-Bold',
-  },
-  medicineDescription: {
-    fontSize: 14,
-    color: '#757575',
-    fontFamily: 'Poppins-Regular',
-  },
-  medicinePrice: {
-    fontSize: 14,
-    marginVertical: 5,
-    fontFamily: 'Poppins-Bold',
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 8,
-  },
   uploadContainer: {
     width: '100%',
-    marginTop: 24,
+    marginTop: 16,
     backgroundColor: '#fff',
     padding: 16,
     alignItems: 'center',
+    borderRadius: 10,
+  },
+  uploadText: {
+    fontFamily: 'Poppins-Bold',
+    fontSize: 18,
+    color: '#033c6b',
+  },
+  SubText: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: 14,
+    color: '#757575',
+    marginTop: 8,
+    textAlign: 'center',
+    marginBottom: 16,
   },
   uploadButton: {
     width: '100%',
     backgroundColor: '#033c6b',
     borderRadius: 8,
   },
-  orderButton: {
-    backgroundColor: '#38b6ff',
-    borderRadius: 8,
-    fontFamily: 'Poppins-Regular',
+  centeredContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
+  placeholderText: {
+    fontSize: 18,
+    fontFamily: 'Poppins-Bold',
+    color: '#757575',
+  },
+  bottomNav: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    backgroundColor: '#033c6b',
+    height: 65,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    elevation: 8,
+  },
+  navItem: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  labelText: {
+    fontFamily: 'Poppins-Regular',
+    fontSize: 12,
+    marginTop: 2,
+  },
+
+  //Catogories
+  categoriesContainer: {
+    padding: 16,
+    backgroundColor: '#fff',
+    borderRadius:10,
+  },
+  categoriesTitle: {
+    fontSize: 12,
+    marginBottom: 12,
+    fontFamily:"Poppins-Bold"
+  },
+  categoriesList: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+  },
+  categoryItem: {
+    width: '23%',
+    height: 120,
+    aspectRatio: 1, // Ensures the item is square
+    backgroundColor: '#fff',
+    borderRadius: 8,
+    borderWidth: 1,
+    borderColor: '#eee',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  categoryName: {
+    fontSize: 9,
+    textAlign: 'center',
+    fontFamily:"Poppins-Regular"
+  },
+
 });

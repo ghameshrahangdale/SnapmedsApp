@@ -13,6 +13,10 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import auth from '@react-native-firebase/auth';
 import LocationPicker from './LocationPicker';
+import Categories from './Navigations/Categories';
+import UploadRX from './Navigations/UploadRX';
+import Cart from './Navigations/Cart';
+import Account from './Navigations/Account';
 
 export default function BrowseMedicines() {
   const [search, setSearch] = useState('');
@@ -137,52 +141,20 @@ export default function BrowseMedicines() {
       />
     </LinearGradient>
   );
-
-  // Dummy route handlers for other tabs
-  const CategoriesRoute = () => (
-    <View style={styles.centeredContainer}>
-      <Text style={styles.placeholderText}>Browse Categories</Text>
-    </View>
-  );
-
-  const UploadRoute = () => (
-    <View style={styles.centeredContainer}>
-      <Text style={styles.placeholderText}>Upload Prescription</Text>
-    </View>
-  );
-
-  const CartRoute = () => (
-    <View style={styles.centeredContainer}>
-      <Text style={styles.placeholderText}>Cart Items</Text>
-    </View>
-  );
-
-  const AccountRoute = () => (
-    <View style={styles.centeredContainer}>
-      <Text style={styles.placeholderText}>Account Information</Text>
-      <Button
-        mode="outlined"
-        onPress={handleLogout}
-        style={{ marginTop: 20 }}
-        labelStyle={{ fontFamily: 'Poppins-Regular', color: '#033c6b' }}>
-        Logout
-      </Button>
-    </View>
-  );
-
+  
   // Renders the correct content based on the selected tab
   const renderScene = () => {
     switch (activeTab) {
       case 'home':
         return <HomeRoute />;
       case 'categories':
-        return <CategoriesRoute />;
+        return <Categories/>;
       case 'upload':
-        return <UploadRoute />;
+        return <UploadRX setActiveTab={setActiveTab}/>;
       case 'cart':
-        return <CartRoute />;
+        return <Cart />;
       case 'account':
-        return <AccountRoute />;
+        return <Account />;
       default:
         return <HomeRoute />;
     }
@@ -322,7 +294,7 @@ const styles = StyleSheet.create({
   },
   labelText: {
     fontFamily: 'Poppins-Regular',
-    fontSize: 12,
+    fontSize: 9,
     marginTop: 2,
   },
 

@@ -56,7 +56,7 @@ const PharmacyLogin = ({ navigation }) => {
         </TouchableOpacity>
 
         {/* Login Button */}
-        <TouchableOpacity style={styles.button}>
+        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('PharmacyDashboard')}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
       </View>

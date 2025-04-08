@@ -1,4 +1,3 @@
-import { View, Text } from "react-native";
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import SplashScreen from "../Screens/SplashScreen";
@@ -10,7 +9,7 @@ import JoinAsPartnersScreen from "../Screens/JoinAsPartnersScreen";
 import PharmacyLogin from "../Components/PharmacyPartners/Login/PharmacyLogin";
 import PharmacyRegister from "../Components/PharmacyPartners/Register/PharmacyRegister";
 import DeliveryLogin from "../Components/DeliveryPartner/Login/DeliveryLogin";
-import PharmacyDashboard from "../Components/PharmacyPartners/PharmacyDashboard";
+import PharmacyDashboard from "../Components/PharmacyPartners/PharmacyDashboard/PharmacyDashboard";
 import DeliveryRegister from "../Components/DeliveryPartner/Register/DeliveryRegister";
 import DeliveryDashboard from "../Components/DeliveryPartner/DeliveryDashboard/DeliveryDashboard";
 
@@ -32,13 +31,10 @@ const AppNavigator = () => {
       <Stack.Screen name="Pharmacy/Login" component={PharmacyLogin} />
       <Stack.Screen name="PharmacyRegister" component={PharmacyRegister} />
       <Stack.Screen name="PharmacyDashboard" component={PharmacyDashboard} />
-
       {/* Delivery Partner Screens */}
       <Stack.Screen name="Delivery/Login" component={DeliveryLogin} />
       <Stack.Screen name="DeliveryRegister" component={DeliveryRegister} />
       <Stack.Screen name="DeliveryDashboard" component={DeliveryDashboard} />
-
-      
     </Stack.Navigator>
   );
 };

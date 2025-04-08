@@ -53,7 +53,7 @@ export default function BrowseMedicines() {
         <TouchableOpacity
           style={styles.locationWrapper}
           onPress={() => setLocationVisible(true)}>
-          <MaterialIcons name="location-on" size={22} color="#1E88E5" />
+          <MaterialIcons name="location-on" size={22} color="#033c6b" />
           <Text style={styles.locationText}>{location}</Text>
           <MaterialIcons name="keyboard-arrow-down" size={18} color="#fff" />
         </TouchableOpacity>
@@ -62,7 +62,7 @@ export default function BrowseMedicines() {
             icon="cart"
             size={26}
             onPress={() => navigation.navigate('Cart', { cart })}
-            iconColor="#1E88E5"
+            iconColor="#033c6b"
           />
           <Menu
             visible={menuVisible}

@@ -2,11 +2,32 @@ import React, { useState } from "react";
 import { View, Text, Image, TouchableOpacity, TextInput } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
-import Icon from "react-native-vector-icons/MaterialIcons"; // Import Icon
+import Icon from "react-native-vector-icons/MaterialIcons"; 
+import api from "../../../api/axios"; 
 
-const PharmacyLogin = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
+const PharmacyLogin = () => {
+  const [email, setEmail] = useState("pharmacy@snapmeds.com");
+  const [password, setPassword] = useState("12345678");
+
+  const navigation = useNavigation();
+
+  //handle login
+  const handleLogin = async () => {
+    try {
+      const response = await api.post("/api/pharmacy/login", { email, password });
+
+      if (response.status === 200) {
+        alert("Login Successful!");
+        navigation.navigate("PharmacyDashboard"); 
+      } else {
+        alert("Login failed", response.data.message);
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      Alert.alert("Something went wrong. Please try again.");
+    }
+  };
 
   return (
     <View style={styles.container}>
@@ -56,7 +77,7 @@ const PharmacyLogin = ({ navigation }) => {
         </TouchableOpacity>
 
         {/* Login Button */}
-        <TouchableOpacity style={styles.button} onPress={()=> navigation.navigate('PharmacyDashboard')}>
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
       </View>

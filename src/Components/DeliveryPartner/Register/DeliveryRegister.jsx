@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableOpacity, TextInput, Alert } from "react-nat
 import LinearGradient from "react-native-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialIcons";
-import firestore from "@react-native-firebase/firestore"; // Firestore Import
+import api from '../../../api/axios'; 
 
 const DeliveryRegister = ({ navigation }) => {
   const [step, setStep] = useState(1);
@@ -23,27 +23,34 @@ const DeliveryRegister = ({ navigation }) => {
   // Function to handle registration
   const handleRegister = async () => {
     if (!name || !email || !password || !vehicleType || !vehicleNumber || !drivingLicense) {
-      Alert.alert("Error", "Please fill all the fields.");
+      Alert.alert('Validation Error', 'Please fill all fields before submitting.');
       return;
     }
-
+  
     try {
-      await firestore().collection("delivery_boys").add({
+      const response = await api.post('api/delivery/register', {
         name,
         email,
         password,
         vehicleType,
         vehicleNumber,
-        drivingLicense,
-        createdAt: firestore.FieldValue.serverTimestamp(),
+        drivingLicense
       });
-
-      Alert.alert("Success", "Registration successful!");
-      navigation.navigate("DeliveryLogin");
+  
+      if (response.status === 201) {
+        Alert.alert('Success', 'Registered successfully!', [
+          { text: 'OK', onPress: () => navigation.navigate('Delivery/Login') },
+        ]);
+      }
     } catch (error) {
-      Alert.alert("Error", "Registration failed. Please try again.");
+      if (error.response) {
+        Alert.alert('Error', error.response.data.message || 'Registration failed');
+      } else {
+        Alert.alert('Error', 'Something went wrong. Please try again.');
+      }
     }
   };
+  
 
   return (
     <View style={styles.container}>

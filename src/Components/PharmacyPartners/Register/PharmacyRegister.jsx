@@ -1,28 +1,31 @@
-import React, {useState} from 'react';
-import {View, Text, Image, TouchableOpacity, TextInput} from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, TouchableOpacity, TextInput } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
+import api from '../../../api/axios';
 
-const PharmacyRegister = ({navigation}) => {
+const PharmacyRegister = ({ navigation }) => {
   const navigate = useNavigation();
   const [step, setStep] = useState(1);
   const [formData, setFormData] = useState({
-    firstName: 'Ghamesh',
-    lastName: 'Rahangdale',
-    email: 'pharmacy@snapmeds.com',
-    phone: '7264832848',
-    pharmacyName: 'Nagpure Medical Store',
-    pharmacyType: 'Retail',
-    isOpen: 'Yes',
-    licenceNumber: 'MH12345678',
-    gstNumber: '29ABCDE1234F1Z5',
-    fullAddress: 'Medical Square, Nagpur, Maharashtra, India',
-    city: 'Mumbai',
-    state: 'Maharashtra',
-    postalCode: '441911',
+    firstName: '',
+    lastName: '',
+    email: '',
+    phone: '',
+    pharmacyName: '',
+    pharmacyType: '',
+    isOpen: '',
+    licenceNumber: '',
+    gstNumber: '',
+    fullAddress: '',
+    city: '',
+    state: '',
+    postalCode: '',
     password: '',
     confirmPassword: '',
   });
+
+ 
 
   const handleNext = () => {
     if (step < 4) setStep(step + 1);
@@ -33,7 +36,35 @@ const PharmacyRegister = ({navigation}) => {
   };
 
   const handleChange = (name, value) => {
-    setFormData({...formData, [name]: value});
+    setFormData({ ...formData, [name]: value });
+  };
+
+  //Register handler
+  const handleRegister = async () => {
+    try {
+      const response = await api.post('/api/pharmacy/register', formData);
+      console.log('✅ API response:', response.data);
+  
+      if (response.status === 200 || response.status === 201) {
+        alert('Registered Successfully! Heading to Login');
+        navigation.navigate('Pharmacy/Login');
+      } else {
+        alert(response.data.message || 'Registration failed');
+      }
+    } catch (error) {
+      console.error('❌ API Error:', error);
+  
+      if (error.response) {
+        console.log('🔴 Error response:', error.response.data);
+        alert(`Error: ${error.response.data.message || 'Request failed'}`);
+      } else if (error.request) {
+        console.log('🔴 No response from server');
+        alert('Server not responding. Check backend or internet connection.');
+      } else {
+        console.log('🔴 Error setting up request:', error.message);
+        alert('Something went wrong. Please try again later.');
+      }
+    }
   };
 
   return (
@@ -163,7 +194,9 @@ const PharmacyRegister = ({navigation}) => {
               <Text style={styles.buttonText}>Back</Text>
             </TouchableOpacity>
           )}
-          <TouchableOpacity style={styles.button} onPress={handleNext}>
+
+          {/* Register button */}
+          <TouchableOpacity style={styles.button} onPress={step === 4 ? handleRegister : handleNext}>
             <Text style={styles.buttonText}>
               {step === 4 ? 'Register' : 'Next'}
             </Text>
@@ -175,20 +208,20 @@ const PharmacyRegister = ({navigation}) => {
 };
 
 const styles = {
-  container: {backgroundColor: '#000', flex: 1},
-  textContainer: {padding: 32, height: 263},
-  mainContainer: {padding: 32, backgroundColor: '#fff', height: '100%'},
-  heading: {fontSize: 32, color: '#fff', fontFamily: 'Poppins-Bold'},
+  container: { backgroundColor: '#000', flex: 1 },
+  textContainer: { padding: 32, height: 263 },
+  mainContainer: { padding: 32, backgroundColor: '#fff', height: '100%' },
+  heading: { fontSize: 32, color: '#fff', fontFamily: 'Poppins-Bold' },
   subheading: {
     fontSize: 20,
     color: '#117A65',
     fontFamily: 'Poppins-Bold',
     marginBottom: 20,
   },
-  logo: {width: 30, height: 30, marginTop: 20, marginBottom: 20},
+  logo: { width: 30, height: 30, marginTop: 20, marginBottom: 20 },
   loginText: {
-    color: '#fff', 
-    fontFamily: 'Poppins-Regular', 
+    color: '#fff',
+    fontFamily: 'Poppins-Regular',
     fontSize: 12
   },
   input: {
@@ -215,8 +248,8 @@ const styles = {
     marginHorizontal: 5,
   },
   buttonText: {
-    color: '#fff', 
-    fontSize: 16, 
+    color: '#fff',
+    fontSize: 16,
     fontFamily: 'Poppins-Regular'
   },
 };

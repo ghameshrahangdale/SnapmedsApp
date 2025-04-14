@@ -3,10 +3,28 @@ import { View, Text, Image, TouchableOpacity, TextInput } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import Icon from "react-native-vector-icons/MaterialIcons"; // Import Icon
+import api from '../../../api/axios'; 
 
 const DeliveryLogin = ({ navigation }) => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("ghamesh@gmail.com");
+  const [password, setPassword] = useState("Ghamesh@123");
+
+  const handleLogin = async () => {
+    try {
+      const response = await api.post("/api/delivery/login", { email, password });
+
+      if (response.status === 200) {
+        alert("Login Successful!");
+        navigation.navigate("DeliveryDashboard"); 
+      } else {
+        alert("Login failed", response.data.message);
+      }
+    } catch (error) {
+      console.error("Login error:", error);
+      Alert.alert("Something went wrong. Please try again.");
+    }
+  };
+  
 
   return (
     <View style={styles.container}>
@@ -56,7 +74,7 @@ const DeliveryLogin = ({ navigation }) => {
         </TouchableOpacity>
 
         {/* Login Button */}
-        <TouchableOpacity onPress={()=> navigation.navigate("DeliveryDashboard")} style={styles.button}>
+        <TouchableOpacity onPress={handleLogin} style={styles.button}>
           <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
       </View>

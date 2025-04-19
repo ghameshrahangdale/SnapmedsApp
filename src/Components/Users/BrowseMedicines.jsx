@@ -1,14 +1,7 @@
-import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-} from 'react-native';
-import { Card, Button, IconButton, Menu } from 'react-native-paper';
-import { useNavigation } from '@react-navigation/native';
+import React, {useState} from 'react';
+import {View,Text,TextInput,StyleSheet,Image,TouchableOpacity,} from 'react-native';
+import {Card, Button, IconButton, Menu} from 'react-native-paper';
+import {useNavigation} from '@react-navigation/native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import LinearGradient from 'react-native-linear-gradient';
 import auth from '@react-native-firebase/auth';
@@ -17,6 +10,9 @@ import Categories from './Navigations/Categories';
 import UploadRX from './Navigations/UploadRX';
 import Cart from './Navigations/Cart';
 import Account from './Navigations/Account';
+import PopularMedicines from './PopularMedicines';
+import UploadPrescription from './UploadPrescription';
+import CategoriesSection from './CategorySection';
 
 export default function BrowseMedicines() {
   const [search, setSearch] = useState('');
@@ -26,7 +22,6 @@ export default function BrowseMedicines() {
   const [locationVisible, setLocationVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
   const [activeTab, setActiveTab] = useState('home');
-
 
   // Logout function
   const handleLogout = async () => {
@@ -43,11 +38,12 @@ export default function BrowseMedicines() {
     <LinearGradient
       colors={['#1E88E5', '#E3F2FD', '#E3F2FD', '#E3F2FD', '#E3F2FD']}
       style={styles.container}>
-      <Text style={{ fontFamily: 'Poppins-Regular', fontSize: 12, color: '#fff' }}>
+      <Text
+        style={{fontFamily: 'Poppins-Regular', fontSize: 12, color: '#fff'}}>
         Snapmeds in
       </Text>
-      <Text style={{ fontFamily: 'Poppins-Bold', fontSize: 22, color: '#fff' }}>
-        59 Minutes Delivery
+      <Text style={{fontFamily: 'Poppins-Bold', fontSize: 22, color: '#fff'}}>
+        29 Minutes Delivery
       </Text>
       <View style={styles.locationContainer}>
         <TouchableOpacity
@@ -61,7 +57,7 @@ export default function BrowseMedicines() {
           <IconButton
             icon="cart"
             size={26}
-            onPress={() => navigation.navigate('Cart', { cart })}
+            onPress={() => navigation.navigate('Cart', {cart})}
             iconColor="#033c6b"
           />
           <Menu
@@ -75,8 +71,14 @@ export default function BrowseMedicines() {
                 />
               </TouchableOpacity>
             }>
-            <Menu.Item onPress={() => navigation.navigate('MyProfile')} title="My Profile" />
-            <Menu.Item onPress={() => navigation.navigate('Orders')} title="Orders" />
+            <Menu.Item
+              onPress={() => navigation.navigate('MyProfile')}
+              title="My Profile"
+            />
+            <Menu.Item
+              onPress={() => navigation.navigate('Orders')}
+              title="Orders"
+            />
             <Menu.Item onPress={handleLogout} title="Logout" />
           </Menu>
         </View>
@@ -84,7 +86,12 @@ export default function BrowseMedicines() {
 
       {/* Search Bar */}
       <View style={styles.searchContainer}>
-        <MaterialIcons name="search" size={22} color="#757575" style={styles.searchIcon} />
+        <MaterialIcons
+          name="search"
+          size={22}
+          color="#757575"
+          style={styles.searchIcon}
+        />
         <TextInput
           style={styles.searchBar}
           placeholder="Search Medicine Ex Paracetamol"
@@ -94,44 +101,9 @@ export default function BrowseMedicines() {
         />
       </View>
 
-      {/* Search by Categories Section */}
-      <View style={styles.categoriesContainer}>
-        <Text style={styles.categoriesTitle}>Search by Categories</Text>
-        <View style={styles.categoriesList}>
-          {[
-            { name: 'Pain Relief' },
-            { name: 'Cold & Cough' },
-            { name: 'Diabetes' },
-            { name: 'Heart Care' },
-            { name: 'Vitamins' },
-            { name: 'Skin Care' },
-            { name: 'Weight Management' },
-            { name: 'Immunity Boosters' },
-          ].map((category, index) => (
-            <TouchableOpacity
-              key={index}
-              style={styles.categoryItem}
-              onPress={() => console.log(`Selected: ${category.name}`)}>
-              <Text style={styles.categoryName}>{category.name}</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      </View>
-
-      {/* Upload Prescription Section */}
-      <View style={styles.uploadContainer}>
-        <Text style={styles.uploadText}>Order with Prescription</Text>
-        <Text style={styles.SubText}>Upload Prescription and we will deliver medicine at your door step</Text>
-
-        <Button
-          mode="contained"
-          color="#033c6b"
-          labelStyle={{ fontFamily: 'Poppins-Regular' }}
-          style={styles.uploadButton}
-          onPress={() => navigation.navigate('OrderByPrescription')}>
-          Upload Prescription
-        </Button>
-      </View>
+      <UploadPrescription />
+      <CategoriesSection />
+      <PopularMedicines />
 
       {/* Location Picker Modal */}
       <LocationPicker
@@ -141,16 +113,16 @@ export default function BrowseMedicines() {
       />
     </LinearGradient>
   );
-  
+
   // Renders the correct content based on the selected tab
   const renderScene = () => {
     switch (activeTab) {
       case 'home':
         return <HomeRoute />;
-      case 'categories':
-        return <Categories/>;
+      case 'search':
+        return <Categories />;
       case 'upload':
-        return <UploadRX setActiveTab={setActiveTab}/>;
+        return <UploadRX setActiveTab={setActiveTab} />;
       case 'cart':
         return <Cart />;
       case 'account':
@@ -161,17 +133,17 @@ export default function BrowseMedicines() {
   };
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{flex: 1}}>
       {renderScene()}
 
       {/* Custom Bottom Navigation */}
       <View style={styles.bottomNav}>
         {[
-          { key: 'home', title: 'Home', icon: 'home' },
-          { key: 'categories', title: 'Categories', icon: 'apps' },
-          { key: 'upload', title: 'Upload RX', icon: 'file-upload' },
-          { key: 'cart', title: 'Cart', icon: 'shopping-cart' },
-          { key: 'account', title: 'Account', icon: 'person' },
+          {key: 'home', title: 'Home', icon: 'home'},
+          {key: 'search', title: 'Search', icon: 'search'},
+          {key: 'upload', title: 'Upload RX', icon: 'file-upload'},
+          {key: 'cart', title: 'Cart', icon: 'shopping-cart'},
+          {key: 'account', title: 'Account', icon: 'person'},
         ].map(route => (
           <TouchableOpacity
             key={route.key}
@@ -185,7 +157,7 @@ export default function BrowseMedicines() {
             <Text
               style={[
                 styles.labelText,
-                { color: activeTab === route.key ? '#1E88E5' : '#fff' },
+                {color: activeTab === route.key ? '#1E88E5' : '#fff'},
               ]}>
               {route.title}
             </Text>
@@ -243,32 +215,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Poppins-Regular',
     flex: 1,
   },
-  uploadContainer: {
-    width: '100%',
-    marginTop: 16,
-    backgroundColor: '#fff',
-    padding: 16,
-    alignItems: 'center',
-    borderRadius: 10,
-  },
-  uploadText: {
-    fontFamily: 'Poppins-Bold',
-    fontSize: 18,
-    color: '#033c6b',
-  },
-  SubText: {
-    fontFamily: 'Poppins-Regular',
-    fontSize: 14,
-    color: '#757575',
-    marginTop: 8,
-    textAlign: 'center',
-    marginBottom: 16,
-  },
-  uploadButton: {
-    width: '100%',
-    backgroundColor: '#033c6b',
-    borderRadius: 8,
-  },
+
   centeredContainer: {
     flex: 1,
     justifyContent: 'center',
@@ -297,39 +244,4 @@ const styles = StyleSheet.create({
     fontSize: 9,
     marginTop: 2,
   },
-
-  //Catogories
-  categoriesContainer: {
-    padding: 16,
-    backgroundColor: '#fff',
-    borderRadius:10,
-  },
-  categoriesTitle: {
-    fontSize: 12,
-    marginBottom: 12,
-    fontFamily:"Poppins-Bold"
-  },
-  categoriesList: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-  },
-  categoryItem: {
-    width: '23%',
-    height: 120,
-    aspectRatio: 1, // Ensures the item is square
-    backgroundColor: '#fff',
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#eee',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  categoryName: {
-    fontSize: 9,
-    textAlign: 'center',
-    fontFamily:"Poppins-Regular"
-  },
-
 });

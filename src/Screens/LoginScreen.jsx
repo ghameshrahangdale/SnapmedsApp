@@ -16,8 +16,8 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const LoginScreen = () => {
   const navigation = useNavigation();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('ghameshrahangdale83@gmail.com');
+  const [password, setPassword] = useState('Ghamesh@123');
   const [loading, setLoading] = useState(false);
 
   const handleLogin = async () => {

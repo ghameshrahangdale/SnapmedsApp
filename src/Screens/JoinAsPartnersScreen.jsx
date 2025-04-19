@@ -1,91 +1,119 @@
 import React from 'react';
-import { View, Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import LinearGradient from 'react-native-linear-gradient';
+import { View, Image, StyleSheet, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const JoinAsPartnersScreen = () => {
   const navigation = useNavigation();
 
   return (
-    <LinearGradient colors={['#033c6b', '#1b6ca8']} style={styles.container}>
-      <Text style={styles.heading}>Become a Partner</Text>
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>Become a Partner</Text>
+      <Text style={styles.subtitle}>
+        Join our network of healthcare providers and delivery partners to make healthcare accessible to millions
+      </Text>
 
-      {/* Pharmacy Partner */}
-      <TouchableOpacity
-        onPress={() => navigation.navigate('Pharmacy/Login')}
-        style={styles.button}
-      >
-        <View style={styles.imageContainer}>
-          <Image
-            source={{ uri: 'https://img.freepik.com/premium-vector/pharmacy-with-pharmacist-client-counter_36082-604.jpg' }}
-            style={styles.image}
-          />
-          <View style={styles.overlay}>
-            <Text style={styles.imageText}>Pharmacy Partner</Text>
-          </View>
-        </View>
-      </TouchableOpacity>
+      {/* Pharmacy Partner Card */}
+      <View style={styles.card}>
+        <Image
+          source={{ uri: 'https://img.freepik.com/premium-vector/pharmacy-with-pharmacist-client-counter_36082-604.jpg' }}
+          style={styles.cardImage}
+        />
+        <Text style={styles.cardTitle}>Pharmacy Partner</Text>
+        <Text style={styles.cardDescription}>
+          Join our network of pharmacies and expand your business reach. Get access to thousands of customers and grow your revenue.
+        </Text>
+        <TouchableOpacity
+          style={styles.joinButton}
+          onPress={() => navigation.navigate('Pharmacy/Login')}
+        >
+          <Text style={styles.buttonText}>Join Now</Text>
+        </TouchableOpacity>
+      </View>
 
-      {/* Delivery Partner */}
-      <TouchableOpacity
-        onPress={() => navigation.navigate('Delivery/Login')}
-        style={styles.button}
-      >
-        <View style={styles.imageContainer}>
-          <Image
-            source={{ uri: 'https://img.freepik.com/premium-vector/way-concept-vector-illustration_1354720-3574.jpg' }}
-            style={styles.image}
-          />
-          <View style={styles.overlay}>
-            <Text style={styles.imageText}>Delivery Boy</Text>
-          </View>
-        </View>
-      </TouchableOpacity>
-    </LinearGradient>
+      {/* Delivery Partner Card */}
+      <View style={styles.card}>
+        <Image
+          source={{ uri: 'https://img.freepik.com/premium-vector/way-concept-vector-illustration_1354720-3574.jpg' }}
+          style={styles.cardImage}
+        />
+        <Text style={styles.cardTitle}>Delivery Partner</Text>
+        <Text style={styles.cardDescription}>
+          Be your own boss! Join our delivery network and earn competitive income while helping people access essential medicines.
+        </Text>
+        <TouchableOpacity
+          style={styles.joinButton}
+          onPress={() => navigation.navigate('Delivery/Login')}
+        >
+          <Text style={styles.buttonText}>Join Now</Text>
+        </TouchableOpacity>
+      </View>
+    </ScrollView>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
     padding: 20,
+    backgroundColor: '#fff',
+    alignItems: 'center',
   },
-  heading: {
-    marginBottom: 20,
+  title: {
     fontSize: 26,
-    color: "#38b6ff",
+    marginBottom: 10,
+    color: '#000',
+    textAlign: 'center',
     fontFamily: 'Poppins-Bold',
   },
-  button: {
+  subtitle: {
+    fontSize: 16,
+    color: '#555',
     marginBottom: 20,
-    width: '100%',
-    alignItems: 'center',
+    textAlign: 'center',
+    paddingHorizontal: 10,
+    fontFamily: 'Poppins-Regular',
   },
-  imageContainer: {
-    width: 300,
-    height: 300,
-    borderRadius: 20,
-    overflow: 'hidden',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  image: {
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 16,
     width: '100%',
-    height: '100%',
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 8,
+    elevation: 5,
+  },
+  cardImage: {
+    width: '100%',
+    height: 180,
+    borderRadius: 10,
     resizeMode: 'cover',
+    marginBottom: 12,
   },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
+  cardTitle: {
+    fontSize: 18,
+    marginBottom: 6,
+    color: '#000',
+    fontFamily: 'Poppins-Bold',
+  },
+  cardDescription: {
+    fontSize: 14,
+    color: '#444',
+    marginBottom: 12,
+    fontFamily: 'Poppins-Regular',
+  },
+  joinButton: {
+    backgroundColor: '#033c6b',
+    paddingVertical: 10,
+    borderRadius: 8,
     alignItems: 'center',
   },
-  imageText: {
+  buttonText: {
     color: '#fff',
-    fontSize: 22,
-    fontFamily: 'Poppins-Bold',
+   
+    fontSize: 15,
+    fontFamily: 'Poppins-Medium',
   },
 });
 

@@ -6,6 +6,8 @@ import {
   Image,
   StyleSheet,
   TextInput,
+  ScrollView,
+  StatusBar,
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import LinearGradient from 'react-native-linear-gradient';
@@ -33,8 +35,13 @@ export default function HomeRoute({
     <LinearGradient
       colors={['#1E88E5', '#E3F2FD', '#E3F2FD', '#E3F2FD', '#E3F2FD']}
       style={styles.container}>
+      
+      {/* Status Bar */}
+      <StatusBar backgroundColor="#1E88E5" barStyle="light-content" />
+
       <Text style={styles.snapMedsText}>Snapmeds in</Text>
       <Text style={styles.deliveryTimeText}>29 Minutes Delivery</Text>
+
       <View style={styles.locationContainer}>
         <TouchableOpacity
           style={styles.locationWrapper}
@@ -91,9 +98,14 @@ export default function HomeRoute({
         />
       </View>
 
-      <UploadPrescription />
-      <CategoriesSection />
-      <PopularMedicines />
+      {/* Scrollable Content After Search */}
+      <ScrollView
+        contentContainerStyle={styles.scrollContent}
+        showsVerticalScrollIndicator={false}>
+        <UploadPrescription setActiveTab={setActiveTab} />
+        <CategoriesSection />
+        <PopularMedicines />
+      </ScrollView>
 
       {/* Location Picker Modal */}
       <LocationPicker
@@ -160,5 +172,8 @@ const styles = StyleSheet.create({
   searchBar: {
     fontFamily: 'Poppins-Regular',
     flex: 1,
+  },
+  scrollContent: {
+    paddingBottom: 32,
   },
 });

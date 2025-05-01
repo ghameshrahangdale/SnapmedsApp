@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const UploadPrescription = ({ navigation }) => {
+const UploadPrescription = ({ navigation, setActiveTab}) => {
   return (
     <LinearGradient
         colors={['#002060', '#42A5F5']}
@@ -22,7 +22,7 @@ const UploadPrescription = ({ navigation }) => {
 
           <TouchableOpacity
             style={styles.uploadButton}
-            onPress={() => navigation.navigate('OrderByPrescription')}
+            onPress={() => setActiveTab('upload')}
           >
             <Icon name="upload" size={18} color="#000" />
             <Text style={styles.uploadButtonText}> Upload now</Text>

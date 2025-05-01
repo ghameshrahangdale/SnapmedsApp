@@ -44,6 +44,7 @@ const PopularMedicines = () => {
         data={medicines}
         keyExtractor={item => item.id}
         numColumns={2}
+        scrollEnabled={false}
         columnWrapperStyle={{ justifyContent: 'space-between' }}
         renderItem={({ item }) => (
           <View style={styles.card}>

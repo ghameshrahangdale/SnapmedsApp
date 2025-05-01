@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { View, StyleSheet, ImageBackground, Animated, Image } from 'react-native';
+import { View, StyleSheet, Animated, Image, StatusBar } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import { Text } from 'react-native-paper';
 
 const SplashScreen = ({ navigation }) => {
@@ -21,37 +22,33 @@ const SplashScreen = ({ navigation }) => {
 
   return (
     <Animated.View style={{ flex: 1, transform: [{ scale: scaleAnim }] }}>
-      <ImageBackground
-        source={require('../Assets/Images/background.jpg')}
-        style={styles.backgroundImage}
-      >
+      <LinearGradient colors={['#033c6b', '#1b6ca8']} style={styles.gradient}>
+      <StatusBar backgroundColor="#033c6b" barStyle="light-content" />
         <View style={styles.container}>
           <Image source={require('../Assets/Images/flash.png')} style={styles.logoImage} />
           <Text variant="displayMedium" style={styles.logo}>
             snapmeds
           </Text>
           <Text variant="bodyLarge" style={styles.title}>
-            Nagpur’s 1st Meds Delivery App
+            Instant Medicine Delivery App
           </Text>
           <Text variant="bodyLarge" style={styles.title2}>
-            Get Medicines Delivered in 60 Minutes
+            Get medicines delivered in just 30M
           </Text>
         </View>
-      </ImageBackground>
+      </LinearGradient>
     </Animated.View>
   );
 };
 
 const styles = StyleSheet.create({
-  backgroundImage: {
+  gradient: {
     flex: 1,
-    resizeMode: 'cover',
   },
   container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     padding: 20,
   },
   logo: {
@@ -65,7 +62,6 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     marginBottom: 10,
-
   },
   title: {
     color: "#fff",

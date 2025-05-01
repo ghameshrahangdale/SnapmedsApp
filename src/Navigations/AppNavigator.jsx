@@ -4,7 +4,6 @@ import SplashScreen from "../Screens/SplashScreen";
 import LoginScreen from "../Screens/LoginScreen";
 import SignUp from "../Screens/SignUp";
 import BrowseMedicines from "../Components/Users/BrowseMedicines";
-import Cart from "../Components/Cart/Cart";
 import JoinAsPartnersScreen from "../Screens/JoinAsPartnersScreen";
 import PharmacyLogin from "../Components/PharmacyPartners/Login/PharmacyLogin";
 import PharmacyRegister from "../Components/PharmacyPartners/Register/PharmacyRegister";
@@ -24,8 +23,6 @@ const AppNavigator = () => {
       <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="BrowseMedicines" component={BrowseMedicines} />
       
-      <Stack.Screen name="Cart" component={Cart} />
-
       {/* Partner Screens */}
       <Stack.Screen name="JoinAsPartners" component={JoinAsPartnersScreen} />
       <Stack.Screen name="Pharmacy/Login" component={PharmacyLogin} />

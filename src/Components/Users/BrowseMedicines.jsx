@@ -2,30 +2,30 @@ import React, {useState} from 'react';
 import {
   View,
   StyleSheet,
-  TouchableOpacity,
   Text,
-  TextInput,
   StatusBar,
+  TouchableOpacity,
 } from 'react-native';
-import {useNavigation} from '@react-navigation/native';
-import HomeRoute from './HomeRoute'; // Import the new HomeRoute component
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import auth from '@react-native-firebase/auth';
-import Categories from './Navigations/Categories';
-import UploadRX from './Navigations/UploadRX';
-import Cart from './Navigations/Cart';
-import Account from './Navigations/Account';
+import {useNavigation} from '@react-navigation/native';
+
+import HomeRoute from './HomeRoute';
+import Categories from './Tabs/Categories';
+import UploadRX from './Tabs/UploadRX';
+import Cart from './Tabs/Cart';
+import Account from './Tabs/Account';
+
+const Tab = createBottomTabNavigator();
 
 export default function BrowseMedicines() {
   const [search, setSearch] = useState('');
   const [cart, setCart] = useState([]);
-  const navigation = useNavigation();
   const [location, setLocation] = useState('Choose Your Location');
   const [locationVisible, setLocationVisible] = useState(false);
   const [menuVisible, setMenuVisible] = useState(false);
-  const [activeTab, setActiveTab] = useState('home');
+  const navigation = useNavigation();
 
-  // Logout function
   const handleLogout = async () => {
     try {
       await auth().signOut();
@@ -35,81 +35,79 @@ export default function BrowseMedicines() {
     }
   };
 
-  // Renders the correct content based on the selected tab
-  const renderScene = () => {
-    switch (activeTab) {
-      case 'home':
-        return (
-          <HomeRoute
-            location={location}
-            setActiveTab={setActiveTab}
-            setLocation={setLocation}
-            setLocationVisible={setLocationVisible}
-            menuVisible={menuVisible}
-            setMenuVisible={setMenuVisible}
-            handleLogout={handleLogout}
-            navigation={navigation}
-            search={search}
-            setSearch={setSearch}
-            locationVisible={locationVisible}
-            cart={cart}
-          />
-        );
-
-      case 'search':
-        return <Categories />;
-      case 'upload':
-        return <UploadRX setActiveTab={setActiveTab} />;
-      case 'cart':
-        return <Cart />;
-      case 'account':
-        return <Account />;
-      default:
-        return <HomeRoute />;
-    }
-  };
-
   return (
-    <View style={{flex: 1}}>
-      <StatusBar
-        backgroundColor="#1E88E5"  // customize this color to match your theme
-        barStyle="light-content"   // or "dark-content" depending on background
-      />
-      {renderScene()}
+    <>
+      <StatusBar backgroundColor="#1E88E5" barStyle="light-content" />
+      <Tab.Navigator
+        screenOptions={({route}) => ({
+          headerShown: false,
+          tabBarShowLabel: true,
+          tabBarLabelStyle: styles.labelText,
+          tabBarStyle: styles.bottomNav,
+          tabBarIcon: ({focused, color, size}) => {
+            let iconName;
 
-      {/* Custom Bottom Navigation */}
-      <View style={styles.bottomNav}>
-        {[
-          {key: 'home', title: 'Home', icon: 'home'},
-          {key: 'search', title: 'Search', icon: 'search'},
-          {key: 'upload', title: 'Upload RX', icon: 'file-upload'},
-          {key: 'cart', title: 'Cart', icon: 'shopping-cart'},
-          {key: 'account', title: 'Account', icon: 'person'},
-        ].map(route => (
-          <TouchableOpacity
-            key={route.key}
-            style={styles.navItem}
-            onPress={() => setActiveTab(route.key)}>
-            <MaterialIcons
-              name={route.icon}
-              size={26}
-              color={activeTab === route.key ? '#1E88E5' : '#fff'}
+            switch (route.name) {
+              case 'Home':
+                iconName = 'home';
+                break;
+              case 'Search':
+                iconName = 'search';
+                break;
+              case 'UploadRX':
+                iconName = 'file-upload';
+                break;
+              case 'Cart':
+                iconName = 'shopping-cart';
+                break;
+              case 'Account':
+                iconName = 'person';
+                break;
+              default:
+                iconName = 'home';
+            }
+
+            return (
+              <MaterialIcons
+                name={iconName}
+                size={26}
+                color={focused ? '#1E88E5' : '#fff'}
+              />
+            );
+          },
+          tabBarActiveTintColor: '#1E88E5',
+          tabBarInactiveTintColor: '#fff',
+        })}>
+        <Tab.Screen name="Home">
+          {() => (
+            <HomeRoute
+              location={location}
+              setLocation={setLocation}
+              setLocationVisible={setLocationVisible}
+              menuVisible={menuVisible}
+              setMenuVisible={setMenuVisible}
+              handleLogout={handleLogout}
+              navigation={navigation}
+              search={search}
+              setSearch={setSearch}
+              locationVisible={locationVisible}
+              cart={cart}
             />
-            <Text
-              style={[
-                styles.labelText,
-                {color: activeTab === route.key ? '#1E88E5' : '#fff'},
-              ]}>
-              {route.title}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    </View>
+          )}
+        </Tab.Screen>
+        <Tab.Screen name="Search" component={Categories} />
+        <Tab.Screen name="UploadRX">
+          {() => <UploadRX />}
+        </Tab.Screen>
+        <Tab.Screen name="Cart">
+          {() => <Cart navigation={navigation} />}
+        </Tab.Screen>
+        <Tab.Screen name="Account" component={Account} />
+      </Tab.Navigator>
+    </>
   );
 }
 
-// Styles for BrowseMedicines component
 const styles = StyleSheet.create({
   bottomNav: {
     flexDirection: 'row',
@@ -119,10 +117,6 @@ const styles = StyleSheet.create({
     borderTopLeftRadius: 24,
     borderTopRightRadius: 24,
     elevation: 8,
-  },
-  navItem: {
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   labelText: {
     fontFamily: 'Poppins-Regular',

@@ -11,6 +11,8 @@ import DeliveryLogin from "../Components/DeliveryPartner/Login/DeliveryLogin";
 import PharmacyDashboard from "../Components/PharmacyPartners/PharmacyDashboard/PharmacyDashboard";
 import DeliveryRegister from "../Components/DeliveryPartner/Register/DeliveryRegister";
 import DeliveryDashboard from "../Components/DeliveryPartner/DeliveryDashboard/DeliveryDashboard";
+import Checkout from "../Components/Checkout/Checkout";
+import OrderConfirmation from "../Components/Checkout/OrderConfirmation";
 
 
 const AppNavigator = () => {
@@ -32,6 +34,10 @@ const AppNavigator = () => {
       <Stack.Screen name="Delivery/Login" component={DeliveryLogin} />
       <Stack.Screen name="DeliveryRegister" component={DeliveryRegister} />
       <Stack.Screen name="DeliveryDashboard" component={DeliveryDashboard} />
+
+      {/* checkout */}
+      <Stack.Screen name="Checkout" component={Checkout} />
+      <Stack.Screen name="OrderConfirmation" component={OrderConfirmation} />
     </Stack.Navigator>
   );
 };

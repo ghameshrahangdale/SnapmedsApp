@@ -30,11 +30,9 @@ const SplashScreen = ({ navigation }) => {
             snapmeds
           </Text>
           <Text variant="bodyLarge" style={styles.title}>
-            Instant Medicine Delivery App
+            Medicines delivery in just 30 Minutes
           </Text>
-          <Text variant="bodyLarge" style={styles.title2}>
-            Get medicines delivered in just 30M
-          </Text>
+          
         </View>
       </LinearGradient>
     </Animated.View>
@@ -54,8 +52,8 @@ const styles = StyleSheet.create({
   logo: {
     color: "#fff",
     textAlign: 'center',
-    marginBottom: 7,
-    fontFamily: "Poppins-ExtraBold",
+    marginBottom: 5,
+    fontFamily: "Poppins-Bold",
     fontSize: 50,
   },
   logoImage: {
@@ -68,7 +66,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginBottom: 5,
     fontFamily: "Poppins-Regular",
-    fontSize: 17,
+    fontSize: 14.5,
   },
   title2: {
     color: "#fff",

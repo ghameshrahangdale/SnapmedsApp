@@ -5,6 +5,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   Alert,
+  Image
 } from 'react-native'
 import LinearGradient from 'react-native-linear-gradient'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -53,7 +54,10 @@ const UserAccount = ({ setActiveTab }) => {
       <View style={styles.mainContainer}>
         {/* Profile Info */}
         <View style={styles.profileContainer}>
-          <MaterialIcons name="account-circle" size={80} color="#1E88E5" />
+          <Image
+            source={{ uri: 'https://i.pravatar.cc/80' }}
+            style={styles.profileImage}
+          />
           <View>
             <Text style={styles.profileName}>Ghamesh Rahangdale</Text>
             <Text style={styles.profileEmail}>ghameshrahangdale83@gmail.com</Text>
@@ -127,6 +131,13 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: 'Poppins-Bold',
     color: '#1E88E5',
+  },
+   profileImage: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: '#ccc',
+    
   },
   profileEmail: {
     fontSize: 12,

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {
   View,
   StyleSheet,
@@ -10,7 +10,7 @@ import {
   Alert,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {useNavigation} from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import auth from '@react-native-firebase/auth';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -76,7 +76,7 @@ const LoginScreen = () => {
 
         <Text style={styles.inputLabel}>Password</Text>
         <View style={styles.inputContainer}>
-          
+
           <TextInput
             placeholder="Password"
             value={password}
@@ -115,6 +115,10 @@ const LoginScreen = () => {
         {/* Alternative Login Option */}
         <Text style={styles.orText}>-- Or login with --</Text>
         <TouchableOpacity style={styles.buttonGoogle}>
+          <Image
+            source={require('../Assets/Images/google.png')}
+            style={styles.googleIcon}
+          />
           <Text style={styles.buttonGoogleText}>Continue with Google</Text>
         </TouchableOpacity>
 
@@ -127,15 +131,16 @@ const LoginScreen = () => {
 };
 
 const styles = StyleSheet.create({
-  container: {flex: 1, backgroundColor: '#f5f5f5'},
-  logoContainer: {height: 260, padding: 32, justifyContent: 'center'},
-  logo: {width: 30, height: 30, marginTop: 20, marginBottom: 20},
+  container: { flex: 1, backgroundColor: '#f5f5f5' },
+  logoContainer: { height: 260, padding: 32, justifyContent: 'center' },
+  logo: { width: 30, height: 30, marginTop: 20, marginBottom: 20 },
   title: {
     fontSize: 32,
     color: '#FFFFFF',
     marginBottom: 10,
     fontFamily: 'Poppins-Bold',
     textAlign: 'left',
+
   },
   formContainer: {
     flex: 1,
@@ -223,6 +228,14 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderWidth: 1,
     alignItems: 'center',
+    flexDirection: 'row',  // <- Add this to align icon and text horizontally
+    justifyContent: 'center', // Center content horizontally
+  },
+  googleIcon: {
+    width: 20,
+    height: 20,
+    marginRight: 8,
+    resizeMode: 'contain',
   },
   buttonGoogleText: {
     color: '#000',

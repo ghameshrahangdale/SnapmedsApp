@@ -11,7 +11,7 @@ import {
 } from 'react-native';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import LinearGradient from 'react-native-linear-gradient';
-import {IconButton, Menu} from 'react-native-paper';
+import { IconButton, Menu } from 'react-native-paper';
 import LocationPicker from './LocationPicker';
 import UploadPrescription from './UploadPrescription';
 import CategoriesSection from './CategorySection';
@@ -35,7 +35,7 @@ export default function HomeRoute({
     <LinearGradient
       colors={['#1E88E5', '#E3F2FD', '#E3F2FD', '#E3F2FD', '#E3F2FD']}
       style={styles.container}>
-      
+
       {/* Status Bar */}
       <StatusBar backgroundColor="#1E88E5" barStyle="light-content" />
 
@@ -63,9 +63,10 @@ export default function HomeRoute({
             anchor={
               <TouchableOpacity onPress={() => setMenuVisible(true)}>
                 <Image
-                  source={require('../../Assets/Images/background.jpg')}
+                  source={{ uri: 'https://img.freepik.com/premium-photo/casual-young-man-shirt_146377-2992.jpg?uid=R65975106&ga=GA1.1.1445817534.1747891354&semt=ais_hybrid&w=740' }}
                   style={styles.profileImage}
                 />
+
               </TouchableOpacity>
             }>
             <Menu.Item
@@ -156,6 +157,8 @@ const styles = StyleSheet.create({
     height: 40,
     borderRadius: 20,
     marginLeft: 8,
+    borderWidth:2,
+    borderColor:'#033c6b'
   },
   searchContainer: {
     flexDirection: 'row',

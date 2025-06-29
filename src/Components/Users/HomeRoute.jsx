@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   Text,
   View,
@@ -16,6 +16,8 @@ import LocationPicker from './LocationPicker';
 import UploadPrescription from './UploadPrescription';
 import CategoriesSection from './CategorySection';
 import PopularMedicines from './PopularMedicines';
+import { auth } from '../../firebaseConfig'; // adjust path as needed
+
 
 export default function HomeRoute({
   setActiveTab,
@@ -31,11 +33,18 @@ export default function HomeRoute({
   search,
   setSearch,
 }) {
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const currentUser = auth().currentUser;
+    setUser(currentUser);
+  }, []);
+
   return (
     <LinearGradient
       colors={['#1E88E5', '#E3F2FD', '#E3F2FD', '#E3F2FD', '#E3F2FD']}
-      style={styles.container}>
-
+      style={styles.container}
+    >
       {/* Status Bar */}
       <StatusBar backgroundColor="#1E88E5" barStyle="light-content" />
 
@@ -45,11 +54,13 @@ export default function HomeRoute({
       <View style={styles.locationContainer}>
         <TouchableOpacity
           style={styles.locationWrapper}
-          onPress={() => setLocationVisible(true)}>
+          onPress={() => setLocationVisible(true)}
+        >
           <MaterialIcons name="location-on" size={22} color="#033c6b" />
           <Text style={styles.locationText}>{location}</Text>
           <MaterialIcons name="keyboard-arrow-down" size={18} color="#fff" />
         </TouchableOpacity>
+
         <View style={styles.iconContainer}>
           <IconButton
             icon="cart"
@@ -63,12 +74,16 @@ export default function HomeRoute({
             anchor={
               <TouchableOpacity onPress={() => setMenuVisible(true)}>
                 <Image
-                  source={{ uri: 'https://img.freepik.com/premium-photo/casual-young-man-shirt_146377-2992.jpg?uid=R65975106&ga=GA1.1.1445817534.1747891354&semt=ais_hybrid&w=740' }}
+                  source={{
+                    uri:
+                      user?.photoURL ||
+                      'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
+                  }}
                   style={styles.profileImage}
                 />
-
               </TouchableOpacity>
-            }>
+            }
+          >
             <Menu.Item
               onPress={() => navigation.navigate('MyProfile')}
               title="My Profile"
@@ -102,8 +117,9 @@ export default function HomeRoute({
       {/* Scrollable Content After Search */}
       <ScrollView
         contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}>
-        <UploadPrescription setActiveTab={setActiveTab} />
+        showsVerticalScrollIndicator={false}
+      >
+        <UploadPrescription setActiveTab={setActiveTab} navigation={navigation}/>
         <CategoriesSection />
         <PopularMedicines />
       </ScrollView>
@@ -155,10 +171,8 @@ const styles = StyleSheet.create({
   profileImage: {
     width: 40,
     height: 40,
-    borderRadius: 20,
+    borderRadius: 8,
     marginLeft: 8,
-    borderWidth:2,
-    borderColor:'#033c6b'
   },
   searchContainer: {
     flexDirection: 'row',

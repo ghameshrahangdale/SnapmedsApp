@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import AppBar from '../../../Common/AppBar';
 
 const Categories = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -60,13 +61,8 @@ const Categories = () => {
       style={styles.container}
     >
       <SafeAreaView style={styles.safeArea}>
-        <View style={styles.appBar}>
-          <TouchableOpacity style={styles.backButton}>
-            <Icon name="arrow-back" size={24} color="#fff" />
-          </TouchableOpacity>
-          <Text style={styles.appBarTitle}>Search Medicines</Text>
-        </View>
-
+        
+        <AppBar/>
         <ScrollView contentContainerStyle={styles.content}>
           <TextInput
             placeholder="Search for medicines, health products..."

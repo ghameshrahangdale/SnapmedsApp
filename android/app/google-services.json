@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "145929342075",
+    "firebase_url": "https://snapmeds-app-default-rtdb.firebaseio.com",
     "project_id": "snapmeds-app",
     "storage_bucket": "snapmeds-app.firebasestorage.app"
   },
@@ -12,7 +13,20 @@
           "package_name": "com.snapmedsapp"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "145929342075-r3snu4e9lq7pihl5oh5bua2q393l797k.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.snapmedsapp",
+            "certificate_hash": "160df67f3ac2c834e77a3627edbd094239b4f678"
+          }
+        },
+        {
+          "client_id": "145929342075-v5t7vu8rp30avumh153t1sfg4ek8lotg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCePZ63kXz7Vug6DkZduYe145eDTjXG4a4"
@@ -20,7 +34,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "145929342075-v5t7vu8rp30avumh153t1sfg4ek8lotg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

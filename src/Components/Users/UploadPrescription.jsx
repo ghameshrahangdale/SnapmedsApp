@@ -22,7 +22,7 @@ const UploadPrescription = ({ navigation, setActiveTab}) => {
 
           <TouchableOpacity
             style={styles.uploadButton}
-            onPress={() => setActiveTab('upload')}
+            onPress={() => navigation.navigate('BrowseMedicines', {screen:"UploadRX"})}
           >
             <Icon name="upload" size={18} color="#000" />
             <Text style={styles.uploadButtonText}> Upload now</Text>

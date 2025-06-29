@@ -1,33 +1,56 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
   StyleSheet,
   TouchableOpacity,
-  Alert,
-  Image
-} from 'react-native'
-import LinearGradient from 'react-native-linear-gradient'
-import Icon from 'react-native-vector-icons/Ionicons'
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+  Image,
+  ScrollView,
+  Dimensions,
+} from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import Icon from 'react-native-vector-icons/Ionicons';
+import { auth } from '../../../firebaseConfig';
+import { useNavigation } from '@react-navigation/native';
+import Toast from 'react-native-toast-message';
+import AppBar from '../../../Common/AppBar';
 
-const UserAccount = ({ setActiveTab }) => {
-  // Navigate to Home
-  const handleBackPress = () => {
-    setActiveTab('home')
-  }
+const { width } = Dimensions.get('window');
 
-  // Handle Card Press (Placeholder for future navigation)
-  const handleCardPress = (title) => {
+const UserAccount = () => {
+  const [user, setUser] = useState(null);
+  const navigation = useNavigation();
+
+  useEffect(() => {
+    const currentUser = auth().currentUser;
+    setUser(currentUser);
+  }, []);
+
+  const handleCardPress = async (title) => {
     if (title === 'Logout') {
-      Alert.alert('Logout Successful!', 'You have been logged out.')
-      setActiveTab('LoginScreen')
+      try {
+        await auth().signOut();
+        Toast.show({
+          type: 'success',
+          text1: 'Logout Successful',
+          text2: 'You have been logged out 👋',
+        });
+      } catch (error) {
+        Toast.show({
+          type: 'error',
+          text1: 'Logout Failed',
+          text2: error.message,
+        });
+      }
     } else {
-      Alert.alert(title, `Feature coming soon!`)
+      Toast.show({
+        type: 'info',
+        text1: `${title}`,
+        text2: 'Feature coming soon!',
+      });
     }
-  }
+  };
 
-  // Card Data
   const accountOptions = [
     { title: 'Your Profile', icon: 'person' },
     { title: 'Your Orders', icon: 'cart' },
@@ -35,42 +58,48 @@ const UserAccount = ({ setActiveTab }) => {
     { title: 'Payment Details', icon: 'card' },
     { title: 'Settings', icon: 'settings' },
     { title: 'Logout', icon: 'exit' },
-  ]
+  ];
 
   return (
     <LinearGradient
-      colors={['#1E88E5', '#E3F2FD', '#E3F2FD', '#E3F2FD', '#E3F2FD']}
-      style={styles.container}>
+      colors={['#1E88E5', '#E3F2FD', '#E3F2FD']}
+      style={styles.container}
+    >
+      <AppBar />
 
-      {/* App Bar with Back Button */}
-      <View style={styles.appBar}>
-        <TouchableOpacity onPress={handleBackPress}>
-          <Icon name="arrow-back" size={24} color="#fff" />
-        </TouchableOpacity>
-        <Text style={styles.appBarTitle}>My Account</Text>
-      </View>
-
-      {/* Main Content */}
-      <View style={styles.mainContainer}>
+      <ScrollView
+        contentContainerStyle={styles.scrollContainer}
+        showsVerticalScrollIndicator={false}
+      >
         {/* Profile Info */}
         <View style={styles.profileContainer}>
           <Image
-            source={{ uri: 'https://i.pravatar.cc/80' }}
+            source={{
+              uri:
+                user?.photoURL ||
+                'https://cdn-icons-png.flaticon.com/512/3135/3135715.png',
+            }}
             style={styles.profileImage}
           />
           <View>
-            <Text style={styles.profileName}>Ghamesh Rahangdale</Text>
-            <Text style={styles.profileEmail}>ghameshrahangdale83@gmail.com</Text>
+            <Text style={styles.profileName}>
+              {user?.displayName || 'Guest User'}
+            </Text>
+            <Text style={styles.profileEmail}>
+              {user?.email || 'Not logged in'}
+            </Text>
           </View>
         </View>
 
-        {/* Account Options Cards */}
+        {/* Account Options */}
         <View style={styles.cardContainer}>
           {accountOptions.map((option, index) => (
             <TouchableOpacity
               key={index}
               style={styles.card}
-              onPress={() => handleCardPress(option.title)}>
+              onPress={() => handleCardPress(option.title)}
+              activeOpacity={0.7}
+            >
               <View style={styles.iconContainer}>
                 <Icon name={option.icon} size={20} color="#1E88E5" />
               </View>
@@ -79,82 +108,55 @@ const UserAccount = ({ setActiveTab }) => {
             </TouchableOpacity>
           ))}
         </View>
-      </View>
+      </ScrollView>
     </LinearGradient>
-  )
-}
+  );
+};
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'center',
   },
-
-  appBar: {
-    width: '100%',
-    height: 50,
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    flexDirection: 'row',
-    alignItems: 'center',
+  scrollContainer: {
     paddingHorizontal: 16,
-    marginTop: 20,
-    backgroundColor: 'transparent',
+    paddingBottom: 40,
+    gap: 24,
   },
-  appBarTitle: {
-    fontSize: 18,
-    fontFamily: 'Poppins-Regular',
-    color: '#fff',
-    marginLeft: 12,
-  },
-
-  mainContainer: {
-    marginTop: 80,
-    width: '100%',
-    paddingHorizontal: 16,
-    flex: 1,
-    gap: 16,
-  },
-
   profileContainer: {
-    width: '100%',
     backgroundColor: '#fff',
-    alignItems: 'center',
-    borderRadius: 8,
+    borderRadius: 12,
     flexDirection: 'row',
     padding: 16,
     gap: 12,
+    alignItems: 'center',
+   
   },
-  profileName: {
-    fontSize: 20,
-    fontFamily: 'Poppins-Bold',
-    color: '#1E88E5',
-  },
-   profileImage: {
+  profileImage: {
     width: 80,
     height: 80,
     borderRadius: 40,
     backgroundColor: '#ccc',
-    
+  },
+  profileName: {
+    fontSize: 18,
+    fontFamily: 'Poppins-Bold',
+    color: '#1E88E5',
   },
   profileEmail: {
     fontSize: 12,
     fontFamily: 'Poppins-Regular',
     color: '#757575',
   },
-
   cardContainer: {
-    width: '100%',
+    gap: 12,
   },
   card: {
     backgroundColor: '#fff',
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
-    borderRadius: 8,
-    marginBottom: 12,
+    borderRadius: 10,
+    
   },
   iconContainer: {
     width: 36,
@@ -166,11 +168,11 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   cardText: {
-    fontSize: 14,
+    fontSize: 15,
     fontFamily: 'Poppins-Regular',
     color: '#033c6b',
     flex: 1,
   },
-})
+});
 
-export default UserAccount
+export default UserAccount;

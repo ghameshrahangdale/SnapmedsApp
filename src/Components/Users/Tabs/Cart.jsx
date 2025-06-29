@@ -11,6 +11,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient'
 import Icon from 'react-native-vector-icons/Ionicons'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import AppBar from '../../../Common/AppBar'
 
 const Cart = ({ setActiveTab, navigation }) => {
   const [cartItems, setCartItems] = useState([
@@ -67,13 +68,7 @@ const Cart = ({ setActiveTab, navigation }) => {
         colors={['#1E88E5', '#E3F2FD', '#E3F2FD']}
         style={styles.container}>
         
-        {/* App Bar */}
-        <View style={styles.appBar}>
-          <TouchableOpacity onPress={handleBackPress}>
-            <Icon name="arrow-back" size={24} color="#fff" />
-          </TouchableOpacity>
-          <Text style={styles.appBarTitle}>Your Cart</Text>
-        </View>
+        <AppBar/>
 
         {/* Main Content */}
         <View style={styles.mainContainer}>

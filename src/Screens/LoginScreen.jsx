@@ -11,8 +11,10 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
-import auth from '@react-native-firebase/auth';
+import { auth } from '../firebaseConfig';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import Toast from 'react-native-toast-message';
 
 const LoginScreen = () => {
   const navigation = useNavigation();
@@ -39,6 +41,31 @@ const LoginScreen = () => {
     }
   };
 
+  async function onGoogleButtonPress() {
+    try {
+      setLoading(true);
+      const isConfigured = await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
+      const userInfo = await GoogleSignin.signIn();
+      const idToken = userInfo.data?.idToken;
+
+      if (!idToken) throw new Error('No idToken received from Google Sign-In');
+
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+      const userCredential = await auth().signInWithCredential(googleCredential);
+
+      Toast.show({
+        type: 'success',
+        text1: 'Login Successful!',
+        text2: `Welcome ${userCredential.user.displayName || 'back'}`,
+      });
+
+      // navigation.navigate('BrowseMedicines');
+    } catch (error) {
+
+    } finally {
+      setLoading(false);
+    }
+  }
   return (
     <View style={styles.container}>
       {/* Logo & Title Section with Linear Gradient */}
@@ -113,8 +140,8 @@ const LoginScreen = () => {
         </TouchableOpacity>
 
         {/* Alternative Login Option */}
-        <Text style={styles.orText}>-- Or login with --</Text>
-        <TouchableOpacity style={styles.buttonGoogle}>
+        <Text style={styles.orText}>Or</Text>
+        <TouchableOpacity style={styles.buttonGoogle} onPress={onGoogleButtonPress}>
           <Image
             source={require('../Assets/Images/google.png')}
             style={styles.googleIcon}

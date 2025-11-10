@@ -11,9 +11,10 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
-import { auth } from '../firebaseConfig';
-import Ionicons from 'react-native-vector-icons/Ionicons';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import Toast from 'react-native-toast-message';
 
 const LoginScreen = () => {
@@ -30,42 +31,148 @@ const LoginScreen = () => {
 
     setLoading(true);
     try {
-      await auth().signInWithEmailAndPassword(email, password);
-      Alert.alert('Success', 'Login Successful! Welcome.');
+      // 1. Sign in with email and password
+      const userCredential = await auth().signInWithEmailAndPassword(email, password);
+      const user = userCredential.user;
+
+      console.log("User Login --------", user);
+
+      // 2. Firestore user handling
+      if (user?.uid) {
+        const userRef = firestore().collection('users').doc(user.uid);
+        const docSnap = await userRef.get();
+        console.log("User Document Snapshot ----", docSnap);
+
+        if (!docSnap.exists) {
+          // Create new user document if doesn't exist
+          await userRef.set({
+            uid: user.uid,
+            displayName: user.displayName || '',
+            email: user.email,
+            photoURL: user.photoURL || '',
+            profileCompleted: false,
+            accountStatus: "active",
+            createdAt: firestore.FieldValue.serverTimestamp(),
+            lastLoginAt: firestore.FieldValue.serverTimestamp(),
+          });
+          console.log("New user added to Firestore");
+        } else {
+          // Update existing user document
+          await userRef.update({
+            accountStatus: "active",
+            lastLoginAt: firestore.FieldValue.serverTimestamp(),
+            ...(user.displayName && { displayName: user.displayName }),
+            ...(user.photoURL && { photoURL: user.photoURL }),
+          });
+          console.log("Existing user updated in Firestore");
+        }
+      }
+
+      Toast.show({
+        type: 'success',
+        text1: 'Login Successful!',
+        text2: `Welcome ${user.displayName || user.email}`,
+        visibilityTime: 3000,
+      });
+
       navigation.navigate('BrowseMedicines');
     } catch (error) {
       console.error('Login Error:', error);
-      Alert.alert('Error', 'Invalid credentials. Please try again.');
+      let errorMessage = 'Invalid credentials. Please try again.';
+      
+      if (error.code === 'auth/user-not-found') {
+        errorMessage = 'No account found with this email.';
+      } else if (error.code === 'auth/wrong-password') {
+        errorMessage = 'Incorrect password. Please try again.';
+      } else if (error.code === 'auth/invalid-email') {
+        errorMessage = 'Invalid email address.';
+      } else if (error.code === 'auth/too-many-requests') {
+        errorMessage = 'Too many failed attempts. Please try again later.';
+      }
+      
+      Toast.show({
+        type: 'error',
+        text1: 'Login Failed',
+        text2: errorMessage,
+        visibilityTime: 4000,
+      });
     } finally {
       setLoading(false);
     }
   };
 
-  async function onGoogleButtonPress() {
+   async function onGoogleButtonPress() {
     try {
+      
       setLoading(true);
-      const isConfigured = await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
-      const userInfo = await GoogleSignin.signIn();
-      const idToken = userInfo.data?.idToken;
 
-      if (!idToken) throw new Error('No idToken received from Google Sign-In');
+      // 1. Ensure Play Services
+      await GoogleSignin.hasPlayServices({ showPlayServicesUpdateDialog: true });
 
+      // 2. Sign In
+      const userSingin = await GoogleSignin.signIn();
+      const idToken = userSingin.data.idToken;
+      console.log("Google Sign-In Response ----", userSingin);
+      if (!idToken) throw new Error('No idToken from Google Sign-In');
+
+      // 3. Firebase credential
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-      const userCredential = await auth().signInWithCredential(googleCredential);
+
+      // 4. Sign in with Firebase
+      const result = await auth().signInWithCredential(googleCredential);
+      const user = result.user;
+
+      console.log("User Login --------", user);
+
+      // 5. Firestore user handling
+   
+      if (user?.uid) {
+    
+        const userRef = firestore().collection('users').doc(user.uid);
+        const docSnap = await userRef.get();
+        console.log( "User Document Snapshot ----", docSnap, );
+
+        if (!docSnap._exists) {
+          await userRef.set({
+            uid: user.uid,
+            displayName: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+            profileCompleted: false,
+            accountStatus: "active",
+            createdAt: firestore.FieldValue.serverTimestamp(),
+          });
+          console.log("New user added to Firestore");
+        } else if (docSnap.data()?.accountStatus === "inactive") {
+          await userRef.update({
+            accountStatus: "active",
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+            updatedAt: firestore.FieldValue.serverTimestamp(),
+          });
+        }
+      }
 
       Toast.show({
         type: 'success',
-        text1: 'Login Successful!',
-        text2: `Welcome ${userCredential.user.displayName || 'back'}`,
+        text1: 'Welcome!',
+        text2: 'You have successfully signed in with Google.',
+        visibilityTime: 3000,
       });
 
-      // navigation.navigate('BrowseMedicines');
     } catch (error) {
-
+      console.log(error);
+      Toast.show({
+        type: 'error',
+        text1: 'Login Failed',
+        text2: 'Please Try Again',
+      });
     } finally {
       setLoading(false);
     }
   }
+
+
   return (
     <View style={styles.container}>
       {/* Logo & Title Section with Linear Gradient */}
@@ -255,8 +362,8 @@ const styles = StyleSheet.create({
     borderColor: '#ccc',
     borderWidth: 1,
     alignItems: 'center',
-    flexDirection: 'row',  // <- Add this to align icon and text horizontally
-    justifyContent: 'center', // Center content horizontally
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   googleIcon: {
     width: 20,
@@ -274,11 +381,6 @@ const styles = StyleSheet.create({
     marginVertical: 10,
     fontFamily: 'Poppins-Regular',
     fontSize: 12,
-  },
-  socialButtons: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    width: '100%',
   },
 });
 

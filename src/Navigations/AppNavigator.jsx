@@ -16,6 +16,7 @@ import DeliveryRegister from "../Components/DeliveryPartner/Register/DeliveryReg
 import DeliveryDashboard from "../Components/DeliveryPartner/DeliveryDashboard/DeliveryDashboard";
 import Checkout from "../Components/Checkout/Checkout";
 import OrderConfirmation from "../Components/Checkout/OrderConfirmation";
+import ProfileScreen from "../Screens/ProfileScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -62,6 +63,7 @@ const AppNavigator = () => {
       <Stack.Screen name="Delivery/Login" component={DeliveryLogin} />
       <Stack.Screen name="DeliveryRegister" component={DeliveryRegister} />
       <Stack.Screen name="DeliveryDashboard" component={DeliveryDashboard} />
+      <Stack.Screen name="ProfileScreen" component={ProfileScreen} />
     </Stack.Navigator>
   );
 };

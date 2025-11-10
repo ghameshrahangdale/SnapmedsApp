@@ -5,6 +5,7 @@ import AppNavigator from './Navigations/AppNavigator';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import Toast from 'react-native-toast-message';
 import { CustomToast } from './Common/CustomToast';
+import { AuthProvider } from './contexts/authContext';
 
 export default function App() {
 
@@ -18,9 +19,11 @@ export default function App() {
 }, []);
 
   return (
+    <AuthProvider>
     <NavigationContainer>
       <AppNavigator />
         <Toast config={CustomToast} />
     </NavigationContainer>
+    </AuthProvider>
   );
 }
